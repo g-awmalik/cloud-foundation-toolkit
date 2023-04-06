@@ -8,6 +8,7 @@ import (
 	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/cli/bpmetadata"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"google.golang.org/protobuf/encoding/prototext"
 )
 
 const (
@@ -83,6 +84,21 @@ func generateSoyFile(bpObj *bpmetadata.BlueprintMetadata) error {
 // generateTextprotoFile consumes the blueprint metadata object to
 // generate the textproto file.
 func generateTextprotoFile(bpObj *bpmetadata.BlueprintMetadata) error {
-	// TODO
+	marshalOptions := prototext.MarshalOptions{
+		Multiline: true,
+	}
+
+	solution := generateSolutionProto(bpObj)
+
+	b, err := marshalOptions.Marshal(solution)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile("solution.textproto", b, 0644)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

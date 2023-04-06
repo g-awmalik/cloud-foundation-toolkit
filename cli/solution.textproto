@@ -1,0 +1,69 @@
+git_source:  {
+  repo:  "https://github.com/GoogleCloudPlatform/terraform-google-log-analysis"
+}
+input_sections:  {
+  properties:  {
+    name:  "delete_contents_on_destroy"
+    default_value:  "false"
+  }
+}
+input_sections:  {
+  properties:  {
+    name:  "deployment_name"
+    default_value:  "log-analysis"
+  }
+}
+input_sections:  {
+  properties:  {
+    name:  "enable_apis"
+    default_value:  "true"
+  }
+}
+input_sections:  {
+  properties:  {
+    name:  "labels"
+    default_value:  "map[]"
+  }
+}
+input_sections:  {
+  properties:  {
+    name:  "project_id"
+    default_value:  "<nil>"
+    is_required:  true
+  }
+}
+input_sections:  {
+  properties:  {
+    name:  "region"
+    default_value:  "us-central1"
+  }
+}
+links:  {
+  output_name:  "bigquery_dataset_name"
+}
+links:  {
+  output_name:  "bigquery_dataset_url"
+}
+links:  {
+  output_name:  "bigquery_table_name"
+}
+links:  {
+  output_name:  "bucket_name"
+}
+links:  {
+  output_name:  "datastudio_report_url"
+}
+links:  {
+  output_name:  "deployment_id"
+}
+roles:  "roles/owner"
+apis:  "cloudresourcemanager.googleapis.com"
+apis:  "iam.googleapis.com"
+apis:  "storage-api.googleapis.com"
+apis:  "storage.googleapis.com"
+apis:  "serviceusage.googleapis.com"
+apis:  "compute.googleapis.com"
+apis:  "logging.googleapis.com"
+apis:  "run.googleapis.com"
+apis:  "bigquery.googleapis.com"
+apis:  "bigquerydatatransfer.googleapis.com"
