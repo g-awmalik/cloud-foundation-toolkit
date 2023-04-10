@@ -3,7 +3,6 @@ syntax = "proto3";
 option go_package = "github.com/GoogleCloudPlatform/cloud-foundation-toolkit/cli/bpconsume/jumpstartsolutions/gen_protos";
 
 message Solution {
-
   // GitHub source containing the terraform configs of the solution.
   GitSource git_source = 13;
 
@@ -13,23 +12,8 @@ message Solution {
   // link to GCP pricing calculator.
   string cost_estimate_link = 16;
 
-  // Solution-specific form inputs.
-  repeated Section input_sections = 6;
-
-  // Links to show in the deployments table.
-  repeated DeploymentLink links = 3;
-
-  // IAM roles required by the service account deploying the solution, in the
-  // form of "roles/compute.admin".
-  repeated string roles = 2;
-
-  // APIs required by the service account deploying the solution in the form
-  // "compute.googleapis.com".
-  repeated string apis = 1;
-
+  DeployData deploy_data = 14;
 }
-
-
 
 // A set of files in a Git repository.
 message GitSource {
@@ -88,5 +72,21 @@ message DeploymentLink {
   // Only one DeploymentLink per DeploymentData may set this to true.
   bool show_in_notification = 2;
   bool open_in_new_tab = 3;
+}
+
+message DeployData {
+  // Solution-specific form inputs.
+  repeated Section input_sections = 6;
+
+  // Links to show in the deployments table.
+  repeated DeploymentLink links = 3;
+
+  // IAM roles required by the service account deploying the solution, in the
+  // form of "roles/compute.admin".
+  repeated string roles = 2;
+
+  // APIs required by the service account deploying the solution in the form
+  // "compute.googleapis.com".
+  repeated string apis = 1;
 }
 

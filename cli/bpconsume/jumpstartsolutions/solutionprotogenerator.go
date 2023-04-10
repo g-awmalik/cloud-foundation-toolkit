@@ -17,6 +17,7 @@ func generateSolutionProto(bpObj *bpmetadata.BlueprintMetadata) (*gen_protos.Sol
 	addDeploymentTimeEstimate(solution, bpObj)
 	addCostEstimate(solution, bpObj)
 
+	solution.DeployData = &gen_protos.DeployData{}
 	err := addRoles(solution, bpObj)
 	if err != nil {
 		return nil, err
@@ -76,8 +77,8 @@ func addRoles(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata
 	}
 	for _, bpRoles := range bpObj.Spec.Roles {
 		if bpRoles.Level == "Project" {
-			solution.Roles = make([]string, len(bpRoles.Roles))
-			copy(solution.Roles, bpRoles.Roles)
+			solution.DeployData.Roles = make([]string, len(bpRoles.Roles))
+			copy(solution.DeployData.Roles, bpRoles.Roles)
 		}
 	}
 	return nil
@@ -89,8 +90,8 @@ func addApis(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata)
 	if len(bpObj.Spec.Services) == 0 {
 		return
 	}
-	solution.Apis = make([]string, len(bpObj.Spec.Services))
-	copy(solution.Apis, bpObj.Spec.Services)
+	solution.DeployData.Apis = make([]string, len(bpObj.Spec.Services))
+	copy(solution.DeployData.Apis, bpObj.Spec.Services)
 }
 
 // addVariables adds the terraform input variables to the solution object from
@@ -99,7 +100,7 @@ func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 	if len(bpObj.Spec.BlueprintInterface.Variables) == 0 {
 		return
 	}
-	solution.InputSections = []*gen_protos.Section{}
+	solution.DeployData.InputSections = []*gen_protos.Section{}
 	for _, variable := range bpObj.Spec.BlueprintInterface.Variables {
 		property := &gen_protos.Property{
 			Name:       variable.Name,
@@ -126,7 +127,7 @@ func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 				property.DefaultValue = fmt.Sprintf("%v", variable.Default)
 			}
 		}
-		solution.InputSections = append(solution.InputSections, &gen_protos.Section{
+		solution.DeployData.InputSections = append(solution.DeployData.InputSections, &gen_protos.Section{
 			Properties: []*gen_protos.Property{property},
 		})
 	}
@@ -138,9 +139,9 @@ func addOutputs(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetada
 	if len(bpObj.Spec.Outputs) == 0 {
 		return
 	}
-	solution.Links = []*gen_protos.DeploymentLink{}
+	solution.DeployData.Links = []*gen_protos.DeploymentLink{}
 	for _, link := range bpObj.Spec.Outputs {
-		solution.Links = append(solution.Links, &gen_protos.DeploymentLink{
+		solution.DeployData.Links = append(solution.DeployData.Links, &gen_protos.DeploymentLink{
 			OutputName: link.Name,
 		})
 	}
