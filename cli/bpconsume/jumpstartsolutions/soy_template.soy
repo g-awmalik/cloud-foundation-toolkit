@@ -1,0 +1,35 @@
+{modname $SOLUTION_ID}
+{namespace boq.clientapi.solutions.metadata.solution.$SOLUTION_ID.templates}
+
+import * as solution from 'java/com/google/cloud/boq/clientapi/solutions/metadata/solution.soy';
+
+// Solution ID: $SOLUTION_ID
+
+{template titleImpl visibility="private" modifies="solution.titleImpl"}
+  {msg desc="Title for $SOLUTION_NAME solution"}
+    $SOLUTION_TITLE
+  {/msg}
+{/template}
+
+{template summaryDescriptionImpl visibility="private" modifies="solution.summaryDescriptionImpl"}
+  {msg desc="Summary description for the $SOLUTION_NAME solution"}
+    $SOLUTION_SUMMARY
+  {/msg}
+{/template}
+
+{template detailedDescriptionImpl visibility="private" modifies="solution.detailedDescriptionImpl"}
+  {msg desc="Detailed description for the $SOLUTION_NAME app solution"}
+    $SOLUTION_DESCRIPTION
+  {/msg}
+{/template}
+
+{template diagramDescriptionsImpl visibility="private" modifies="solution.diagramDescriptionsImpl"}
+  $DIAGRAM_DESCRIPTION
+{/template}
+
+{template diagramAltTextImpl visibility="private" modifies="solution.diagramAltTextImpl"}
+  {msg desc="Image alt text for the $SOLUTION_NAME solution."}
+    Diagram for the $SOLUTION_NAME solution.
+  {/msg}
+{/template}
+
