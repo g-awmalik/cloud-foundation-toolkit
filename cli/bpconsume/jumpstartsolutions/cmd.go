@@ -76,7 +76,7 @@ func consumeMetadata(bpPath string) error {
 
 // generateSoyFile consumes the blueprint metadata object to generate soy file.
 func generateSoyFile(bpObj *bpmetadata.BlueprintMetadata) error {
-	generate_soy(bpObj)
+	generateSoy(bpObj)
 	return nil
 }
 
