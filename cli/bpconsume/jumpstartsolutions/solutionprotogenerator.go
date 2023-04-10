@@ -46,8 +46,10 @@ func addGitSource(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 func addDeploymentTimeEstimate(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata) {
 	if bpObj.Spec.DeploymentDuration.ConfigurationSecs > 0 && bpObj.Spec.DeploymentDuration.DeploymentSecs > 0 {
 		solution.DeploymentEstimate = &gen_protos.DeploymentEstimate{
-			ConfigurationMinutes: int32(bpObj.Spec.DeploymentDuration.ConfigurationSecs / 60),
-			DeploymentMinutes:    int32(bpObj.Spec.DeploymentDuration.DeploymentSecs / 60),
+			// adding 59 (60 - 1) so that the result is ceiling after division.
+			// Using fast ceiling of integer division method.
+			ConfigurationMinutes: int32((bpObj.Spec.DeploymentDuration.ConfigurationSecs + 59) / 60),
+			DeploymentMinutes:    int32((bpObj.Spec.DeploymentDuration.DeploymentSecs + 59) / 60),
 		}
 	}
 }
