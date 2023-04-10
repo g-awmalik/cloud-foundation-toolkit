@@ -4,18 +4,27 @@ option go_package = "github.com/GoogleCloudPlatform/cloud-foundation-toolkit/cli
 
 message Solution {
 
+  // GitHub source containing the terraform configs of the solution.
   GitSource git_source = 13;
 
+  // Estimated time to deploy this Solution.
   DeploymentEstimate deployment_estimate = 10;
 
+  // link to GCP pricing calculator.
   string cost_estimate_link = 16;
 
+  // Solution-specific form inputs.
   repeated Section input_sections = 6;
 
+  // Links to show in the deployments table.
   repeated DeploymentLink links = 3;
 
+  // IAM roles required by the service account deploying the solution, in the
+  // form of "roles/compute.admin".
   repeated string roles = 2;
 
+  // APIs required by the service account deploying the solution in the form
+  // "compute.googleapis.com".
   repeated string apis = 1;
 
 }
