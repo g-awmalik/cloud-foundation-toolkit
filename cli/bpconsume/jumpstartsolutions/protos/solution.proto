@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+option go_package = "github.com/GoogleCloudPlatform/cloud-foundation-toolkit/cli/bpconsume/jumpstartsolutions/gen_protos";
+
+message Solution {
+  // GitHub source containing the terraform configs of the solution.
+  GitSource git_source = 13;
+
+  // Estimated time to deploy this Solution.
+  DeploymentEstimate deployment_estimate = 10;
+
+  // link to GCP pricing calculator.
+  string cost_estimate_link = 16;
+
+  DeployData deploy_data = 14;
+}
+
+// A set of files in a Git repository.
+message GitSource {
+  // Repository URL.
+  // Example: 'https://github.com/kubernetes/examples.git'
+  string repo = 1;
+
+  // Subdirectory inside the repository.
+  // Example: 'staging/my-package'
+  string directory = 2;
+
+  // Git branch or tag.
+  string ref = 3;
+}
+
+message DeploymentEstimate {
+  // time to configure the solution.
+  int32 configuration_minutes = 1;
+
+  // time to deploy the solution.
+  int32 deployment_minutes = 2;
+}
+
+message Section {
+  // List of properties that belong to that section
+  repeated Property properties = 6;
+}
+
+// Information pertaining to one property displayed in the Config UI.
+message Property {
+  // The name (unique) of the property.
+  string name = 1;
+
+  enum Type {
+    STRING = 0;
+    INTEGER = 1;
+    BOOLEAN = 2;
+    ARRAY = 3;
+    NUMBER = 4;
+  }
+  // Property type. Current supported types are: string, integer, boolean, and
+  // array (defaults to string)
+  Type type = 10;
+  // Property default value
+  // Optional.
+  string default_value = 12;
+  // Whether the property is required for the deployment or not.
+  bool is_required = 22;
+}
+
+message DeploymentLink {
+  string output_name = 1;
+  // Used for backwards compatibility of old deployments after an output name
+  // is changed.
+  repeated string alternate_names = 4;
+  // Only one DeploymentLink per DeploymentData may set this to true.
+  bool show_in_notification = 2;
+  bool open_in_new_tab = 3;
+}
+
+message DeployData {
+  // Solution-specific form inputs.
+  repeated Section input_sections = 6;
+
+  // Links to show in the deployments table.
+  repeated DeploymentLink links = 3;
+
+  // IAM roles required by the service account deploying the solution, in the
+  // form of "roles/compute.admin".
+  repeated string roles = 2;
+
+  // APIs required by the service account deploying the solution in the form
+  // "compute.googleapis.com".
+  repeated string apis = 1;
+}
+
