@@ -37,7 +37,10 @@ func generateSoy(bpObj *bpmetadata.BlueprintMetadata) error {
 	solutionTitle := bpObj.Spec.BlueprintInfo.Title
 	solutionSummary := bpObj.Spec.BlueprintInfo.Description.Tagline
 	solutionDescription := bpObj.Spec.BlueprintInfo.Description.Detailed
-	solutionDiagramSteps := bpObj.Spec.BlueprintContent.Architecture.Description
+	solutionDiagramSteps := bpObj.Spec.BlueprintInfo.Description.Architecture
+	if len(solutionDiagramSteps) == 0 {
+		solutionDiagramSteps = bpObj.Spec.BlueprintContent.Architecture.Description
+	}
 	solutionDiagramDescription := createDiagramDescription(solutionDiagramSteps, solutionName)
 
 	replacer := strings.NewReplacer("$SOLUTION_ID", solutionId, "$SOLUTION_NAME", solutionName, "$SOLUTION_TITLE", solutionTitle, "$SOLUTION_SUMMARY", solutionSummary, "$SOLUTION_DESCRIPTION", solutionDescription, "$DIAGRAM_DESCRIPTION", solutionDiagramDescription)
