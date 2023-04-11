@@ -2,17 +2,18 @@ package jumpstartsolutions
 
 import (
 	"bytes"
-	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/cli/bpmetadata"
 	"io/ioutil"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/GoogleCloudPlatform/cloud-foundation-toolkit/cli/bpmetadata"
 )
 
 const (
-	soyDiagramDescriptionMsg = "{msg desc=\"Step $COUNT of $SOLUTION_NAME diagram description\"}\n$SOLUTION_DIAGRAM_DESCRIPTION\n{/msg}\n"
-	soyLineSeparator          = "{\\n}"
+	soyDiagramDescriptionMsg = "  {msg desc=\"Step $COUNT of $SOLUTION_NAME diagram description\"}\n    $SOLUTION_DIAGRAM_DESCRIPTION\n  {/msg}\n"
+	soyLineSeparator         = "  {\\n}\n"
 )
 
 func generateSolutionId(solutionName string) string {
