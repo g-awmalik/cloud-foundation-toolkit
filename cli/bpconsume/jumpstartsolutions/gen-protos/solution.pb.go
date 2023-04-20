@@ -453,7 +453,20 @@ type Property struct {
 	// Optional.
 	DefaultValue string `protobuf:"bytes,12,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
 	// Whether the property is required for the deployment or not.
-	IsRequired bool `protobuf:"varint,22,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
+	IsRequired bool   `protobuf:"varint,22,opt,name=is_required,json=isRequired,proto3" json:"is_required,omitempty"`
+	Validation string `protobuf:"bytes,6,opt,name=validation,proto3" json:"validation,omitempty"`
+	// Validation for string type properties.
+	Pattern   string `protobuf:"bytes,14,opt,name=pattern,proto3" json:"pattern,omitempty"`
+	MaxLength int32  `protobuf:"varint,15,opt,name=max_length,json=maxLength,proto3" json:"max_length,omitempty"`
+	MinLength int32  `protobuf:"varint,16,opt,name=min_length,json=minLength,proto3" json:"min_length,omitempty"`
+	// Validation for integer types.
+	Maximum float32 `protobuf:"fixed32,17,opt,name=maximum,proto3" json:"maximum,omitempty"`
+	Minimum float32 `protobuf:"fixed32,18,opt,name=minimum,proto3" json:"minimum,omitempty"`
+	// Validation for array values.
+	MaxItems int32 `protobuf:"varint,19,opt,name=max_items,json=maxItems,proto3" json:"max_items,omitempty"`
+	MinItems int32 `protobuf:"varint,20,opt,name=min_items,json=minItems,proto3" json:"min_items,omitempty"`
+	// Whether the property is hidden.
+	IsHidden bool `protobuf:"varint,23,opt,name=is_hidden,json=isHidden,proto3" json:"is_hidden,omitempty"`
 }
 
 func (x *Property) Reset() {
@@ -512,6 +525,69 @@ func (x *Property) GetDefaultValue() string {
 func (x *Property) GetIsRequired() bool {
 	if x != nil {
 		return x.IsRequired
+	}
+	return false
+}
+
+func (x *Property) GetValidation() string {
+	if x != nil {
+		return x.Validation
+	}
+	return ""
+}
+
+func (x *Property) GetPattern() string {
+	if x != nil {
+		return x.Pattern
+	}
+	return ""
+}
+
+func (x *Property) GetMaxLength() int32 {
+	if x != nil {
+		return x.MaxLength
+	}
+	return 0
+}
+
+func (x *Property) GetMinLength() int32 {
+	if x != nil {
+		return x.MinLength
+	}
+	return 0
+}
+
+func (x *Property) GetMaximum() float32 {
+	if x != nil {
+		return x.Maximum
+	}
+	return 0
+}
+
+func (x *Property) GetMinimum() float32 {
+	if x != nil {
+		return x.Minimum
+	}
+	return 0
+}
+
+func (x *Property) GetMaxItems() int32 {
+	if x != nil {
+		return x.MaxItems
+	}
+	return 0
+}
+
+func (x *Property) GetMinItems() int32 {
+	if x != nil {
+		return x.MinItems
+	}
+	return 0
+}
+
+func (x *Property) GetIsHidden() bool {
+	if x != nil {
+		return x.IsHidden
 	}
 	return false
 }

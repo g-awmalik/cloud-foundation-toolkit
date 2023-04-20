@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	metadataFileName = "metadata.yaml"
+	metadataFileName        = "metadata.yaml"
+	metadataDisplayFileName = "metadata.display.yaml"
 )
 
 var jssConsumptionFlags struct {
@@ -63,12 +64,17 @@ func consumeMetadata(bpPath string) error {
 		return err
 	}
 
+	bpDpObj, err := bpmetadata.UnmarshalMetadata(bpPath, metadataDisplayFileName)
+	if err != nil {
+		return err
+	}
+
 	err = generateSoyFile(bpObj)
 	if err != nil {
 		return err
 	}
 
-	err = generateTextprotoFile(bpObj)
+	err = generateTextprotoFile(bpObj, bpDpObj)
 	if err != nil {
 		return err
 	}
@@ -87,12 +93,12 @@ func generateSoyFile(bpObj *bpmetadata.BlueprintMetadata) error {
 
 // generateTextprotoFile consumes the blueprint metadata object to
 // generate the textproto file.
-func generateTextprotoFile(bpObj *bpmetadata.BlueprintMetadata) error {
+func generateTextprotoFile(bpObj, bpDpObj *bpmetadata.BlueprintMetadata) error {
 	marshalOptions := prototext.MarshalOptions{
 		Multiline: true,
 	}
 
-	solution, err := generateSolutionProto(bpObj)
+	solution, err := generateSolutionProto(bpObj, bpDpObj)
 	if err != nil {
 		return err
 	}

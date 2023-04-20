@@ -10,7 +10,7 @@ import (
 
 // generateSolutionProto creates the Solution object from the BlueprintMetadata
 // object.
-func generateSolutionProto(bpObj *bpmetadata.BlueprintMetadata) (*gen_protos.Solution, error) {
+func generateSolutionProto(bpObj, bpDpObj *bpmetadata.BlueprintMetadata) (*gen_protos.Solution, error) {
 	solution := &gen_protos.Solution{}
 
 	addGitSource(solution, bpObj)
@@ -24,7 +24,7 @@ func generateSolutionProto(bpObj *bpmetadata.BlueprintMetadata) (*gen_protos.Sol
 	}
 
 	addApis(solution, bpObj)
-	addVariables(solution, bpObj)
+	addVariables(solution, bpObj, bpDpObj)
 	addOutputs(solution, bpObj)
 
 	addIconUrl(solution)
@@ -111,15 +111,18 @@ func addApis(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata)
 
 // addVariables adds terraform input variables to the solution object from
 // the BlueprintMetadata object.
-func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata) {
+func addVariables(solution *gen_protos.Solution, bpObj, bpDpObj *bpmetadata.BlueprintMetadata) {
 	if len(bpObj.Spec.BlueprintInterface.Variables) == 0 {
 		return
 	}
 	solution.DeployData.InputSections = []*gen_protos.Section{}
 	for _, variable := range bpObj.Spec.BlueprintInterface.Variables {
+		bpVariable := bpDpObj.Spec.BlueprintUI.Input.DisplayVariables[variable.Name]
 		property := &gen_protos.Property{
 			Name:       variable.Name,
 			IsRequired: variable.Required,
+			IsHidden:   !bpVariable.Visible,
+			Validation: bpVariable.RegExValidation,
 		}
 		switch variable.VarType {
 		case "string":
@@ -127,6 +130,10 @@ func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 			if variable.Default != nil {
 				property.DefaultValue = fmt.Sprintf("%v", variable.Default)
 			}
+			property.Pattern = bpVariable.RegExValidation
+			property.MaxLength = int32(bpVariable.Maximum)
+			property.MinLength = int32(bpVariable.Minimum)
+
 		case "bool":
 			property.Type = gen_protos.Property_BOOLEAN
 			if variable.Default != nil {
@@ -134,6 +141,8 @@ func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 			}
 		case "list":
 			property.Type = gen_protos.Property_ARRAY
+			property.MaxItems = int32(bpVariable.Maximum)
+			property.MinItems = int32(bpVariable.Minimum)
 		case "number":
 			// Note: tf metadata uses "number" type for both "integer" and "number" type.
 			// Hence, this might require manual update of textproto file.
@@ -141,6 +150,8 @@ func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 			if variable.Default != nil {
 				property.DefaultValue = fmt.Sprintf("%v", variable.Default)
 			}
+			property.Maximum = float32(bpVariable.Maximum)
+			property.Minimum = float32(bpVariable.Minimum)
 		}
 		solution.DeployData.InputSections = append(solution.DeployData.InputSections, &gen_protos.Section{
 			Properties: []*gen_protos.Property{property},
