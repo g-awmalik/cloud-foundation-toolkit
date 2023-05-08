@@ -174,7 +174,7 @@ func addDiagramUrl(solution *gen_protos.Solution) {
 
 // addDocumentationLink adds the URL of the solution's documentation page.
 func addDocumentationLink(solution *gen_protos.Solution) {
-	solution.DocumentationLink = "https://cloud.google.com"
+	solution.DocumentationLink = "<cloud documentation link for the solution e.g. https://cloud.google.com/architecture/big-data-analytics/data-warehouse>"
 }
 
 // addIsSingleton adds whether the solution is a singleton or not.
