@@ -12,6 +12,21 @@ message Solution {
   // link to GCP pricing calculator.
   string cost_estimate_link = 16;
 
+  // Fully qualified URL for the Solution's icon image
+  string icon_url = 3;
+
+  // Fully qualified URL for the image showing the diagram of the solution
+  string diagram_url = 7;
+
+  // Fully qualified URL linking to documentation for this Solution.
+  string documentation_link = 12;
+
+  // Monthly cost estimate for the solution from the GCP pricing calculator.
+  double cost_estimate_usd = 17;
+
+  // List of products used in this solution.
+  repeated CloudProductIdentifier cloud_product_identifiers = 15;
+
   DeployData deploy_data = 14;
 }
 
@@ -74,6 +89,23 @@ message DeploymentLink {
   bool open_in_new_tab = 3;
 }
 
+message OrgPolicyCheck {
+  string id = 1;
+  // Required for listPolicy types.
+  repeated string required_values = 2;
+}
+
+message CloudProductIdentifier {
+  ConsoleProductIdentifier console_product_identifier = 1;
+  string label = 2;
+}
+
+message ConsoleProductIdentifier {
+  string section_id = 1;
+  string page_id = 2;
+  string page_id_for_post_deployment_link = 3;
+}
+
 message DeployData {
   // Solution-specific form inputs.
   repeated Section input_sections = 6;
@@ -88,5 +120,28 @@ message DeployData {
   // APIs required by the service account deploying the solution in the form
   // "compute.googleapis.com".
   repeated string apis = 1;
+
+  // If true, this solution should not have multiple concurrent deployments in
+  // the same project.
+  bool is_singleton = 5;
+
+  repeated OrgPolicyCheck org_policy_checks = 8;
+
+  enum DeployLocationConfig {
+    UNSPECIFIED = 0;
+    BIGQUERY_DATASET = 1;
+    BIGQUERY_DATA_TRANSFER = 2;
+    CLOUD_BUILD = 3;
+    CLOUD_DEPLOY = 4;
+    CLOUD_FUNCTIONS_V2 = 5;
+    CLOUD_MEMORYSTORE = 6;
+    CLOUD_RUN = 7;
+    COMPUTE = 8;
+    TRANSCODER_API = 9;
+    JAVA_APP = 10;
+    JAVA_APP_ON_GKE = 11;
+  }
+
+  repeated DeployLocationConfig location_configs = 4;
 }
 

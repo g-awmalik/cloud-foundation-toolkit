@@ -27,6 +27,14 @@ func generateSolutionProto(bpObj *bpmetadata.BlueprintMetadata) (*gen_protos.Sol
 	addVariables(solution, bpObj)
 	addOutputs(solution, bpObj)
 
+	addIconUrl(solution)
+	addDiagramUrl(solution)
+	addDocumentationLink(solution)
+	addIsSingleton(solution)
+	addLocationConfigs(solution)
+	addOrgPolicyChecks(solution)
+	addCloudProductIdentifiers(solution)
+
 	return solution, nil
 }
 
@@ -39,6 +47,10 @@ func addGitSource(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 	if bpObj.Spec.Source != nil {
 		solution.GitSource.Repo = strings.TrimSuffix(bpObj.Spec.Source.Repo, ".git")
 	}
+
+	// Placeholders for fields that aren't available in OSS metadata
+	solution.GitSource.Ref = "<Git branch or tag or commit hash>"
+	solution.GitSource.Directory = "<Subdirectory inside the repository>"
 }
 
 // addDeploymentTimeEstimate adds the deployment time for the solution to the
@@ -60,6 +72,7 @@ func addCostEstimate(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintM
 	if bpObj.Spec.CostEstimate.URL != "" {
 		solution.CostEstimateLink = bpObj.Spec.CostEstimate.URL
 	}
+	solution.CostEstimateUsd = 1.0
 }
 
 // addRoles adds the roles required by the service account deploying the
@@ -96,7 +109,7 @@ func addApis(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata)
 	copy(solution.DeployData.Apis, bpObj.Spec.Services)
 }
 
-// addVariables adds the terraform input variables to the solution object from
+// addVariables adds terraform input variables to the solution object from
 // the BlueprintMetadata object.
 func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata) {
 	if len(bpObj.Spec.BlueprintInterface.Variables) == 0 {
@@ -135,7 +148,7 @@ func addVariables(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMeta
 	}
 }
 
-// addOutputs adds the terraform outputs to the solution object from the
+// addOutputs adds terraform outputs to the solution object from the
 // BlueprintMetadata object.
 func addOutputs(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetadata) {
 	if len(bpObj.Spec.Outputs) == 0 {
@@ -147,4 +160,50 @@ func addOutputs(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetada
 			OutputName: link.Name,
 		})
 	}
+}
+
+// addIconUrl adds the URL of the solution's icon image.
+func addIconUrl(solution *gen_protos.Solution) {
+	solution.IconUrl = "solution_icon.png"
+}
+
+// addDiagramUrl adds the URL of the solution's architecture diagram image.
+func addDiagramUrl(solution *gen_protos.Solution) {
+	solution.DiagramUrl = "solution_diagram.png"
+}
+
+// addDocumentationLink adds the URL of the solution's documentation page.
+func addDocumentationLink(solution *gen_protos.Solution) {
+	solution.DocumentationLink = "<cloud documentation link for the solution e.g. https://cloud.google.com/architecture/big-data-analytics/data-warehouse>"
+}
+
+// addIsSingleton adds whether the solution is a singleton or not.
+func addIsSingleton(solution *gen_protos.Solution) {
+	solution.DeployData.IsSingleton = true
+}
+
+// addLocationConfigs adds location configs to the solution object.
+func addLocationConfigs(solution *gen_protos.Solution) {
+	solution.DeployData.LocationConfigs = []gen_protos.DeployData_DeployLocationConfig{gen_protos.DeployData_UNSPECIFIED}
+}
+
+// addOrgPolicyChecks adds org policy checks to the solution object.
+func addOrgPolicyChecks(solution *gen_protos.Solution) {
+	solution.DeployData.OrgPolicyChecks = []*gen_protos.OrgPolicyCheck{{
+		Id:             "<Org policy constraint e.g. constraints/gcp.resourceLocations>",
+		RequiredValues: []string{"<required value 1>", "<required value 2>"},
+	}}
+}
+
+// addCloudProductIdentifiers adds cloud product identifiers to the solution
+// object.
+func addCloudProductIdentifiers(solution *gen_protos.Solution) {
+	solution.CloudProductIdentifiers = []*gen_protos.CloudProductIdentifier{{
+		Label: "<product label>",
+		ConsoleProductIdentifier: &gen_protos.ConsoleProductIdentifier{
+			SectionId:                   "<product section ID>",
+			PageId:                      "<product page ID>",
+			PageIdForPostDeploymentLink: "<product page ID for post deployment link>",
+		},
+	}}
 }
