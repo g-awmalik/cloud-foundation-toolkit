@@ -138,8 +138,6 @@ message DeployData {
     CLOUD_RUN = 7;
     COMPUTE = 8;
     TRANSCODER_API = 9;
-    JAVA_APP = 10;
-    JAVA_APP_ON_GKE = 11;
   }
 
   repeated DeployLocationConfig location_configs = 4;
