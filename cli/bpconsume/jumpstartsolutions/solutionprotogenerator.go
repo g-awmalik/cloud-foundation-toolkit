@@ -157,9 +157,7 @@ func addOutputs(solution *gen_protos.Solution, bpObj *bpmetadata.BlueprintMetada
 	solution.DeployData.Links = []*gen_protos.DeploymentLink{}
 	for _, link := range bpObj.Spec.Outputs {
 		solution.DeployData.Links = append(solution.DeployData.Links, &gen_protos.DeploymentLink{
-			OutputName:         link.Name,
-			ShowInNotification: false,
-			OpenInNewTab:       false,
+			OutputName: link.Name,
 		})
 	}
 }
