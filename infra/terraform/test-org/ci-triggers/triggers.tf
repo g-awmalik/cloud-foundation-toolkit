@@ -14,24 +14,6 @@
  * limitations under the License.
  */
 
-resource "google_cloudbuild_trigger" "lint_trigger" {
-  provider    = google-beta
-  project     = local.project_id
-  name        = "${each.key}-lint-trigger"
-  description = "Lint tests on pull request for ${each.key}"
-  for_each    = merge(local.repo_folder, local.example_foundation)
-  github {
-    owner = each.value.gh_org
-    name  = each.key
-    pull_request {
-      branch          = ".*"
-      comment_control = "COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
-    }
-  }
-
-  filename = "build/lint.cloudbuild.yaml"
-}
-
 resource "google_cloudbuild_trigger" "int_trigger" {
   provider    = google-beta
   project     = local.project_id
@@ -54,6 +36,7 @@ resource "google_cloudbuild_trigger" "int_trigger" {
       _BILLING_IAM_TEST_ACCOUNT = each.key == "terraform-google-iam" ? local.billing_iam_test_account : null
       _VOD_TEST_PROJECT_ID      = each.key == "terraform-google-media-cdn-vod" ? local.vod_test_project_id : null
       _FILE_LOGS_BUCKET         = lookup(local.enable_file_log, each.key, false) ? module.filelogs_bucket.url : null
+      _LR_BILLING_ACCOUNT       = local.lr_billing_account
     },
     # add sfb substitutions
     contains(local.bp_on_sfb, each.key) ? local.sfb_substs : {}

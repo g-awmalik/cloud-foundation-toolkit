@@ -5,7 +5,7 @@
   "$defs": {
     "BlueprintActuationTool": {
       "properties": {
-        "type": {
+        "flavor": {
           "type": "string"
         },
         "version": {
@@ -17,7 +17,7 @@
     },
     "BlueprintArchitecture": {
       "properties": {
-        "diagram": {
+        "diagramUrl": {
           "type": "string"
         },
         "description": {
@@ -30,13 +30,13 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "diagram",
+        "diagramUrl",
         "description"
       ]
     },
     "BlueprintAuthor": {
       "properties": {
-        "author": {
+        "title": {
           "type": "string"
         },
         "description": {
@@ -49,7 +49,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "author"
+        "title"
       ]
     },
     "BlueprintCloudProduct": {
@@ -62,6 +62,9 @@
         },
         "label": {
           "type": "string"
+        },
+        "isExternal": {
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
@@ -69,6 +72,39 @@
       "required": [
         "pageUrl"
       ]
+    },
+    "BlueprintContent": {
+      "properties": {
+        "architecture": {
+          "$ref": "#/$defs/BlueprintArchitecture"
+        },
+        "diagrams": {
+          "items": {
+            "$ref": "#/$defs/BlueprintDiagram"
+          },
+          "type": "array"
+        },
+        "documentation": {
+          "items": {
+            "$ref": "#/$defs/BlueprintListContent"
+          },
+          "type": "array"
+        },
+        "subBlueprints": {
+          "items": {
+            "$ref": "#/$defs/BlueprintMiscContent"
+          },
+          "type": "array"
+        },
+        "examples": {
+          "items": {
+            "$ref": "#/$defs/BlueprintMiscContent"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "BlueprintCostEstimate": {
       "properties": {
@@ -134,6 +170,94 @@
         "name"
       ]
     },
+    "BlueprintInfo": {
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/BlueprintRepoDetail"
+        },
+        "version": {
+          "type": "string"
+        },
+        "actuationTool": {
+          "$ref": "#/$defs/BlueprintActuationTool"
+        },
+        "description": {
+          "$ref": "#/$defs/BlueprintDescription"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "deploymentDuration": {
+          "$ref": "#/$defs/BlueprintTimeEstimate"
+        },
+        "costEstimate": {
+          "$ref": "#/$defs/BlueprintCostEstimate"
+        },
+        "cloudProducts": {
+          "items": {
+            "$ref": "#/$defs/BlueprintCloudProduct"
+          },
+          "type": "array"
+        },
+        "orgPolicyChecks": {
+          "items": {
+            "$ref": "#/$defs/BlueprintOrgPolicyCheck"
+          },
+          "type": "array"
+        },
+        "quotaDetails": {
+          "items": {
+            "$ref": "#/$defs/BlueprintQuotaDetail"
+          },
+          "type": "array"
+        },
+        "author": {
+          "$ref": "#/$defs/BlueprintAuthor"
+        },
+        "softwareGroups": {
+          "items": {
+            "$ref": "#/$defs/BlueprintSoftwareGroup"
+          },
+          "type": "array"
+        },
+        "supportInfo": {
+          "$ref": "#/$defs/BlueprintSupport"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "title",
+        "source"
+      ]
+    },
+    "BlueprintInterface": {
+      "properties": {
+        "variables": {
+          "items": {
+            "$ref": "#/$defs/BlueprintVariable"
+          },
+          "type": "array"
+        },
+        "variableGroups": {
+          "items": {
+            "$ref": "#/$defs/BlueprintVariableGroup"
+          },
+          "type": "array"
+        },
+        "outputs": {
+          "items": {
+            "$ref": "#/$defs/BlueprintOutput"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "BlueprintListContent": {
       "properties": {
         "title": {
@@ -172,124 +296,24 @@
     },
     "BlueprintMetadataSpec": {
       "properties": {
-        "title": {
-          "type": "string"
+        "info": {
+          "$ref": "#/$defs/BlueprintInfo"
         },
-        "source": {
-          "$ref": "#/$defs/BlueprintRepoDetail"
+        "content": {
+          "$ref": "#/$defs/BlueprintContent"
         },
-        "version": {
-          "type": "string"
+        "interfaces": {
+          "$ref": "#/$defs/BlueprintInterface"
         },
-        "actuationTool": {
-          "$ref": "#/$defs/BlueprintActuationTool"
+        "requirements": {
+          "$ref": "#/$defs/BlueprintRequirements"
         },
-        "description": {
-          "$ref": "#/$defs/BlueprintDescription"
-        },
-        "icon": {
-          "type": "string"
-        },
-        "deploymentDuration": {
-          "$ref": "#/$defs/BlueprintTimeEstimate"
-        },
-        "costEstimate": {
-          "$ref": "#/$defs/BlueprintCostEstimate"
-        },
-        "cloudProducts": {
-          "items": {
-            "$ref": "#/$defs/BlueprintCloudProduct"
-          },
-          "type": "array"
-        },
-        "quotaDetails": {
-          "items": {
-            "$ref": "#/$defs/BlueprintQuotaDetail"
-          },
-          "type": "array"
-        },
-        "author": {
-          "$ref": "#/$defs/BlueprintAuthor"
-        },
-        "softwareGroups": {
-          "items": {
-            "$ref": "#/$defs/BlueprintSoftwareGroup"
-          },
-          "type": "array"
-        },
-        "supportInfo": {
-          "$ref": "#/$defs/BlueprintSupport"
-        },
-        "architecture": {
-          "$ref": "#/$defs/BlueprintArchitecture"
-        },
-        "diagrams": {
-          "items": {
-            "$ref": "#/$defs/BlueprintDiagram"
-          },
-          "type": "array"
-        },
-        "documentation": {
-          "items": {
-            "$ref": "#/$defs/BlueprintListContent"
-          },
-          "type": "array"
-        },
-        "subBlueprints": {
-          "items": {
-            "$ref": "#/$defs/BlueprintMiscContent"
-          },
-          "type": "array"
-        },
-        "examples": {
-          "items": {
-            "$ref": "#/$defs/BlueprintMiscContent"
-          },
-          "type": "array"
-        },
-        "variables": {
-          "items": {
-            "$ref": "#/$defs/BlueprintVariable"
-          },
-          "type": "array"
-        },
-        "variableGroups": {
-          "items": {
-            "$ref": "#/$defs/BlueprintVariableGroup"
-          },
-          "type": "array"
-        },
-        "outputs": {
-          "items": {
-            "$ref": "#/$defs/BlueprintOutput"
-          },
-          "type": "array"
-        },
-        "roles": {
-          "items": {
-            "$ref": "#/$defs/BlueprintRoles"
-          },
-          "type": "array"
-        },
-        "services": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "input": {
-          "$ref": "#/$defs/BlueprintUIInput"
-        },
-        "runtime": {
-          "$ref": "#/$defs/BlueprintUIOutput"
+        "ui": {
+          "$ref": "#/$defs/BlueprintUI"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "title",
-        "source"
-      ]
+      "type": "object"
     },
     "BlueprintMiscContent": {
       "properties": {
@@ -304,6 +328,24 @@
       "type": "object",
       "required": [
         "name"
+      ]
+    },
+    "BlueprintOrgPolicyCheck": {
+      "properties": {
+        "policyId": {
+          "type": "string"
+        },
+        "requiredValues": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "policyId"
       ]
     },
     "BlueprintOutput": {
@@ -323,14 +365,15 @@
     },
     "BlueprintQuotaDetail": {
       "properties": {
-        "variable": {
+        "dynamicVariable": {
           "type": "string"
         },
-        "type": {
+        "resourceType": {
           "type": "string",
           "enum": [
-            "GCE_INSTANCE",
-            "GCE_DISK"
+            "QRT_GCE_INSTANCE",
+            "QRT_GCE_DISK",
+            "QRT_UNDEFINED"
           ]
         },
         "quotaType": {
@@ -345,7 +388,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "type",
+        "resourceType",
         "quotaType"
       ]
     },
@@ -356,6 +399,9 @@
         },
         "sourceType": {
           "type": "string"
+        },
+        "dir": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -364,6 +410,24 @@
         "repo",
         "sourceType"
       ]
+    },
+    "BlueprintRequirements": {
+      "properties": {
+        "roles": {
+          "items": {
+            "$ref": "#/$defs/BlueprintRoles"
+          },
+          "type": "array"
+        },
+        "services": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "BlueprintRoles": {
       "properties": {
@@ -410,8 +474,8 @@
         "type": {
           "type": "string",
           "enum": [
-            "UNSPECIFIED",
-            "OS"
+            "SG_UNSPECIFIED",
+            "SG_OS"
           ]
         },
         "software": {
@@ -447,11 +511,23 @@
     },
     "BlueprintTimeEstimate": {
       "properties": {
-        "configuration": {
+        "configurationSecs": {
           "type": "integer"
         },
-        "deployment": {
+        "deploymentSecs": {
           "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "BlueprintUI": {
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/BlueprintUIInput"
+        },
+        "runtime": {
+          "$ref": "#/$defs/BlueprintUIOutput"
         }
       },
       "additionalProperties": false,
@@ -500,10 +576,10 @@
         "description": {
           "type": "string"
         },
-        "type": {
+        "varType": {
           "type": "string"
         },
-        "default": true,
+        "defaultValue": true,
         "required": {
           "type": "boolean"
         }
@@ -562,9 +638,9 @@
           "type": "string"
         },
         "title": {
-          "type": "boolean"
+          "type": "string"
         },
-        "visible": {
+        "invisible": {
           "type": "boolean"
         },
         "tooltip": {
@@ -576,6 +652,18 @@
         "regexValidation": {
           "type": "string"
         },
+        "minItems": {
+          "type": "integer"
+        },
+        "maxItems": {
+          "type": "integer"
+        },
+        "minLength": {
+          "type": "integer"
+        },
+        "maxLength": {
+          "type": "integer"
+        },
         "min": {
           "type": "integer"
         },
@@ -585,17 +673,15 @@
         "section": {
           "type": "string"
         },
-        "resourceImpact": {
-          "type": "boolean"
-        },
-        "x-googleProperty": {
+        "xGoogleProperty": {
           "$ref": "#/$defs/GooglePropertyExtension"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "name"
+        "name",
+        "title"
       ]
     },
     "GCEDiskSizeExtension": {
@@ -615,8 +701,13 @@
         "networkVariable": {
           "type": "string"
         },
-        "externalIpType": {
-          "type": "string"
+        "type": {
+          "type": "string",
+          "enum": [
+            "IP_UNSPECIFIED",
+            "IP_EPHEMERAL",
+            "IP_STATIC"
+          ]
         }
       },
       "additionalProperties": false,
@@ -768,25 +859,25 @@
         "type": {
           "type": "string",
           "enum": [
-            "EMAIL_ADDRESS",
-            "MULTI_LINE_STRING",
-            "GCE_DISK_IMAGE",
-            "GCE_DISK_TYPE",
-            "GCE_DISK_SIZE",
-            "GCE_MACHINE_TYPE",
-            "GCE_NETWORK",
-            "GCE_ZONE",
-            "GCE_SUBNETWORK",
-            "GCE_REGION",
-            "GCE_GPU_TYPE",
-            "GCE_GPU_COUNT",
-            "GCE_EXTERNAL_IP",
-            "GCE_IP_FORWARDING",
-            "GCE_FIREWALL",
-            "GCE_FIREWALL_RANGE",
-            "GCE_GENERIC_RESOURCE",
-            "GCS_BUCKET",
-            "IAM_SERVICE_ACCOUNT"
+            "ET_EMAIL_ADDRESS",
+            "ET_MULTI_LINE_STRING",
+            "ET_GCE_DISK_IMAGE",
+            "ET_GCE_DISK_TYPE",
+            "ET_GCE_DISK_SIZE",
+            "ET_GCE_MACHINE_TYPE",
+            "ET_GCE_NETWORK",
+            "ET_GCE_ZONE",
+            "ET_GCE_SUBNETWORK",
+            "ET_GCE_REGION",
+            "ET_GCE_GPU_TYPE",
+            "ET_GCE_GPU_COUNT",
+            "ET_GCE_EXTERNAL_IP",
+            "ET_GCE_IP_FORWARDING",
+            "ET_GCE_FIREWALL",
+            "ET_GCE_FIREWALL_RANGE",
+            "ET_GCE_GENERIC_RESOURCE",
+            "ET_GCS_BUCKET",
+            "ET_IAM_SERVICE_ACCOUNT"
           ]
         },
         "zoneProperty": {

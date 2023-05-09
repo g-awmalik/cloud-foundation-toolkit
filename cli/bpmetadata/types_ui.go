@@ -15,10 +15,10 @@ type BlueprintUI struct {
 type BlueprintUIInput struct {
 
 	// variables is a map defining all inputs on the UI.
-	DisplayVariables map[string]*DisplayVariable `json:"variables,omitempty" yaml:"variables,omitempty"`
+	Variables map[string]*DisplayVariable `json:"variables,omitempty" yaml:"variables,omitempty"`
 
 	// Sections is a generic structure for grouping inputs together.
-	DisplaySections []DisplaySection `json:"sections,omitempty" yaml:"sections,omitempty"`
+	Sections []DisplaySection `json:"sections,omitempty" yaml:"sections,omitempty"`
 }
 
 // Additional display specific metadata pertaining to a particular
@@ -29,10 +29,10 @@ type DisplayVariable struct {
 
 	// Visible title for the variable on the UI. If not present,
 	// Name will be used for the Title.
-	Title bool `json:"title,omitempty" yaml:"title,omitempty"`
+	Title string `json:"title" yaml:"title"`
 
 	// A flag to hide or show the variable on the UI.
-	Visible bool `json:"visible,omitempty" yaml:"visible,omitempty"`
+	Invisible bool `json:"invisible,omitempty" yaml:"invisible,omitempty"`
 
 	// Variable tooltip.
 	Tooltip string `json:"tooltip,omitempty" yaml:"tooltip,omitempty"`
@@ -45,10 +45,22 @@ type DisplayVariable struct {
 	// Typically shown after an invalid input.
 	RegExValidation string `json:"regexValidation,omitempty" yaml:"regexValidation,omitempty"`
 
-	// Minimum no. of values for the input variable.
+	// Minimum no. of inputs for the input variable.
+	MinimumItems int `json:"minItems,omitempty" yaml:"minItems,omitempty"`
+
+	// Max no. of inputs for the input variable.
+	MaximumItems int `json:"maxItems,omitempty" yaml:"maxItems,omitempty"`
+
+	// Minimum length for string values.
+	MinimumLength int `json:"minLength,omitempty" yaml:"minLength,omitempty"`
+
+	// Max length for string values.
+	MaximumLength int `json:"maxLength,omitempty" yaml:"maxLength,omitempty"`
+
+	// Minimum value for numeric types.
 	Minimum int `json:"min,omitempty" yaml:"min,omitempty"`
 
-	// Max no. of values for the input variable.
+	// Max value for numeric types.
 	Maximum int `json:"max,omitempty" yaml:"max,omitempty"`
 
 	// The name of a section to which this variable belongs.
@@ -56,22 +68,16 @@ type DisplayVariable struct {
 	// not set.
 	Section string `json:"section,omitempty" yaml:"section,omitempty"`
 
-	// Designates that this variable has no impact on the costs, quotas, or
-	// permissions associated with the resources in the expanded deployment.
-	// Typically true for application-specific variables that do not affect the
-	// size or number of instances in the deployment.
-	ResourceImpact bool `json:"resourceImpact,omitempty" yaml:"resourceImpact,omitempty"`
-
 	// UI extension associated with the input variable.
 	// E.g. for rendering a GCE machine type selector:
 	//
-	// x-googleProperty:
+	// xGoogleProperty:
 	//   type: GCE_MACHINE_TYPE
 	//   zoneProperty: myZone
 	//   gceMachineType:
 	//     minCpu: 2
 	//     minRamGb: 6
-	UIDisplayVariableExtension GooglePropertyExtension `json:"x-googleProperty,omitempty" yaml:"x-googleProperty,omitempty"`
+	XGoogleProperty GooglePropertyExtension `json:"xGoogleProperty,omitempty" yaml:"xGoogleProperty,omitempty"`
 }
 
 // A logical group of variables. [Section][]s may also be grouped into

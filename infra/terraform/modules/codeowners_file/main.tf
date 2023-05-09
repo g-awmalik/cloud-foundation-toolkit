@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Google LLC
+ * Copyright 2022-2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,18 @@
 locals {
   commit_author = "CFT Bot"
   commit_email  = "cloud-foundation-bot@google.com"
-  owners        = { for value in var.repos_map : value.name => value.owners if can(value.owners) }
-}
-
-data "github_repository" "repo" {
-  for_each = var.repos_map
-  name     = each.value.name
+  owners        = { for value in var.repos_map : value.name => join(" ", formatlist("@%s", value.owners)) if length(value.owners) > 0 }
+  groups        = { for value in var.repos_map : value.name => join(" ", formatlist("@${value.org}/%s", value.groups)) if length(value.groups) > 0 }
 }
 
 resource "github_repository_file" "CODEOWNERS" {
-  for_each            = data.github_repository.repo
-  repository          = each.value.name
+  for_each            = var.repo_list
+  repository          = each.key
   branch              = each.value.default_branch
   file                = "CODEOWNERS"
   commit_message      = "chore: update CODEOWNERS"
   commit_author       = local.commit_author
   commit_email        = local.commit_email
   overwrite_on_create = true
-  content             = "${trimspace("* @${var.org}/${var.owner} ${try(local.owners[each.value.name], "")}")}\n"
+  content             = "${trimspace("* @${var.org}/${var.owner} ${try(local.owners[each.key], "")} ${try(local.groups[each.key], "")}")}\n"
 }

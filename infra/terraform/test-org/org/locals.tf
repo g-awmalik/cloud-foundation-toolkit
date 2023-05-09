@@ -18,6 +18,7 @@ locals {
   org_id              = "943740911108"
   old_billing_account = "01D904-DAF6EC-F34EF7"
   billing_account     = "0138EF-C93849-98B0B5"
+  lr_billing_account  = "01108A-537F1E-A5BFFC"
   cft_ci_group        = "cft-ci-robots@test.blueprints.joonix.net"
   gcp_admins_group    = "gcp-admins@test.blueprints.joonix.net"
   ci_project_id       = "cloud-foundation-cicd"
@@ -54,14 +55,17 @@ locals {
 
   /*
  *  repos schema
- *  name         = "string" (required for modules)
- *  short_name   = "string" (optional for modules, if not prefixed with 'terraform-google-')
- *  org          = "terraform-google-modules" or "GoogleCloudPlatform" (required)
- *  description  = "string" (required)
- *  owners       = "@user1 @user2" (optional)
- *  homepage_url = "string" (optional, overrides default)
- *  module       = BOOL (optional, default is true which includes GH repo configuration)
- *  topics       = "string1,string2,string3" (one or more of local.common_topics required if module = true)
+ *  name              = "string" (required for modules)
+ *  short_name        = "string" (optional for modules, if not prefixed with 'terraform-google-')
+ *  org               = "terraform-google-modules" or "GoogleCloudPlatform" (required)
+ *  description       = "string" (required)
+ *  owners            = "list(string)" ["user1", "user2"] (optional)
+ *  groups            = "list(string)" ["group1", "group1"] (optional)
+ *  homepage_url      = "string" (optional, overrides default)
+ *  module            = BOOL (optional, default is true which includes GH repo configuration)
+ *  topics            = "string1,string2,string3" (one or more of local.common_topics required if module = true)
+ *  lint_env          = "map(string)" (optional)
+ *  disable_lint_yaml = BOOL (optional, default is true)
  *
  */
 
@@ -70,41 +74,41 @@ locals {
       name        = "cloud-foundation-training"
       org         = "terraform-google-modules"
       description = ""
-      owners      = "@marine675 @zefdelgadillo"
+      owners      = ["marine675", "zefdelgadillo"]
     },
     {
       name        = "terraform-google-healthcare"
       org         = "terraform-google-modules"
       description = "Handles opinionated Google Cloud Healthcare datasets and stores"
-      owners      = "@yeweidaniel"
+      owners      = ["yeweidaniel"]
       topics      = local.common_topics.hcls
     },
     {
       name        = "terraform-google-cloud-run"
       org         = "GoogleCloudPlatform"
       description = "Deploys apps to Cloud Run, along with option to map custom domain"
-      owners      = "@prabhu34 @anamer @mitchelljamie"
+      owners      = ["prabhu34", "anamer", "gtsorbo"]
       topics      = "cloudrun,google-cloud-platform,terraform-modules,${local.common_topics.serverless}"
     },
     {
       name        = "terraform-google-secured-data-warehouse"
       org         = "GoogleCloudPlatform"
       description = "Deploys a secured BigQuery data warehouse"
-      owners      = "@erlanderlo"
+      owners      = ["erlanderlo"]
       topics      = join(",", [local.common_topics.da, local.common_topics.e2e])
     },
     {
       name        = "terraform-google-anthos-vm"
       org         = "GoogleCloudPlatform"
       description = "Creates VMs on Anthos Bare Metal clusters"
-      owners      = "@zhuchenwang"
+      owners      = ["zhuchenwang"]
       topics      = "anthos,kubernetes,terraform-module,vm,${local.common_topics.compute}"
     },
     {
       name        = "terraform-google-kubernetes-engine"
       org         = "terraform-google-modules"
       description = "Configures opinionated GKE clusters"
-      owners      = "@Jberlinsky @ericyz"
+      owners      = ["Jberlinsky", "ericyz"]
       topics      = join(",", [local.common_topics.compute, local.common_topics.containers])
     },
     {
@@ -112,50 +116,67 @@ locals {
       short_name  = "ecommerce-microservices"
       org         = "GoogleCloudPlatform"
       description = "Deploys a web-based ecommerce app into a multi-cluster Google Kubernetes Engine setup."
-      owners      = "@NimJay"
+      owners      = ["arbrown", "bourgeoisor", "donmccasland", "minherz", "NimJay", "Shabirmean"]
+      groups      = ["dee-platform-ops"]
+    },
+    {
+      name        = "terraform-example-java-dynamic-point-of-sale"
+      short_name  = "java-dynamic-point-of-sale"
+      org         = "GoogleCloudPlatform"
+      description = "Deploys a dynamic Java webapp into a Google Kubernetes Engine cluster."
+      owners      = ["shabirmean", "Mukamik"]
+      groups      = ["dee-platform-ops"]
+      lint_env = {
+        "EXCLUDE_HEADER_CHECK" = "\\./infra/modules/spanner/sql-schema"
+      }
     },
     {
       name         = "terraform-example-foundation"
       short_name   = "example-foundation"
       org          = "terraform-google-modules"
       description  = "Shows how the CFT modules can be composed to build a secure cloud foundation"
-      owners       = "@rjerrems"
+      owners       = ["rjerrems"]
       homepage_url = "https://cloud.google.com/architecture/security-foundations"
       topics       = join(",", [local.common_topics.e2e, local.common_topics.ops])
+      lint_env = {
+        "EXCLUDE_LINT_DIRS" = "\\./3-networks/modules/transitivity/assets",
+        "ENABLE_PARALLEL"   = "0",
+        "DISABLE_TFLINT"    = "1"
+      }
     },
     {
       name        = "terraform-google-log-analysis"
       org         = "GoogleCloudPlatform"
       description = "Stores and analyzes log data"
-      owners      = "@ryotat7"
+      owners      = ["ryotat7"]
       topics      = local.common_topics.da
     },
     {
       name        = "terraform-google-three-tier-web-app"
       org         = "GoogleCloudPlatform"
       description = "Deploys a three tier web application using Cloud Run and Cloud SQL"
-      owners      = "@tpryan"
+      owners      = ["tpryan"]
       topics      = join(",", [local.common_topics.serverless, local.common_topics.db])
     },
     {
       name        = "terraform-google-load-balanced-vms"
       org         = "GoogleCloudPlatform"
       description = "Creates a Managed Instance Group with a loadbalancer"
-      owners      = "@tpryan"
+      owners      = ["tpryan"]
       topics      = local.common_topics.net
     },
     {
       name        = "terraform-google-secure-cicd"
       org         = "GoogleCloudPlatform"
       description = "Builds a secure CI/CD pipeline on Google Cloud"
-      owners      = "@gtsorbo"
+      owners      = ["gtsorbo"]
       topics      = join(",", [local.common_topics.security, local.common_topics.devtools, local.common_topics.e2e])
     },
     {
       name        = "terraform-google-media-cdn-vod"
       org         = "GoogleCloudPlatform"
       description = "Deploys Media CDN video-on-demand"
-      owners      = "@roddzurcher"
+      owners      = ["roddzurcher"]
       topics      = local.common_topics.ops
     },
     {
@@ -168,7 +189,7 @@ locals {
       name        = "terraform-google-network-forensics"
       org         = "GoogleCloudPlatform"
       description = "Deploys Zeek on Google Cloud"
-      owners      = "@gtsorbo"
+      owners      = ["gtsorbo"]
       topics      = local.common_topics.net
     },
     {
@@ -194,7 +215,7 @@ locals {
       org         = "terraform-google-modules"
       description = "Creates opinionated BigQuery datasets and tables"
       topics      = local.common_topics.da
-      owners      = "@davenportjw"
+      owners      = ["davenportjw"]
     },
     {
       name        = "terraform-google-bootstrap"
@@ -285,6 +306,7 @@ locals {
       org         = "terraform-google-modules"
       description = "Executes Google Cloud CLI commands within Terraform"
       topics      = local.common_topics.devtools
+      lint_env    = { "EXCLUDE_LINT_DIRS" = "\\./cache" }
     },
     {
       name        = "terraform-google-github-actions-runners"
@@ -333,21 +355,21 @@ locals {
       org         = "terraform-google-modules"
       description = "Creates a regional TCP proxy load balancer for Compute Engine by using target pools and forwarding rules"
       topics      = local.common_topics.net
-      owners      = "@imrannayer"
+      owners      = ["imrannayer"]
     },
     {
       name        = "terraform-google-lb-http"
       org         = "terraform-google-modules"
       description = "Creates a global HTTP load balancer for Compute Engine by using forwarding rules"
       topics      = local.common_topics.net
-      owners      = "@imrannayer"
+      owners      = ["imrannayer"]
     },
     {
       name        = "terraform-google-lb-internal"
       org         = "terraform-google-modules"
       description = "Creates an internal load balancer for Compute Engine by using forwarding rules"
       topics      = local.common_topics.net
-      owners      = "@imrannayer"
+      owners      = ["imrannayer"]
     },
     {
       name        = "terraform-google-log-export"
@@ -495,35 +517,35 @@ locals {
       name        = "terraform-google-waap"
       org         = "GoogleCloudPlatform"
       description = "Deploys the WAAP solution on Google Cloud"
-      owners      = "@gtsorbo"
+      owners      = ["gtsorbo"]
       topics      = local.common_topics.ops
     },
     {
       name        = "terraform-google-cloud-workflows"
       org         = "GoogleCloudPlatform"
       description = "Manage Workflows with optional Scheduler or Event Arc triggers"
-      owners      = "@anaik91"
+      owners      = ["anaik91"]
       topics      = join(",", [local.common_topics.serverless, local.common_topics.devtools])
     },
     {
       name        = "terraform-google-cloud-armor"
       org         = "GoogleCloudPlatform"
       description = "Deploy Cloud Armor security policy"
-      owners      = "@imrannayer"
+      owners      = ["imrannayer"]
       topics      = join(",", [local.common_topics.compute, local.common_topics.net])
     },
     {
       name        = "terraform-google-cloud-deploy"
       org         = "GoogleCloudPlatform"
       description = "Create Cloud Deploy pipelines and targets"
-      owners      = "@gtsorbo @niranjankl"
+      owners      = ["gtsorbo", "niranjankl"]
       topics      = join(",", [local.common_topics.devtools])
     },
     {
       name        = "terraform-google-cloud-functions"
       org         = "GoogleCloudPlatform"
       description = "Deploys Cloud Functions (Gen 2)"
-      owners      = "@prabhu34"
+      owners      = ["prabhu34", "gtsorbo"]
       topics      = "cloudfunctions,functions,google-cloud-platform,terraform-modules,${local.common_topics.serverless}"
     },
     {
@@ -531,7 +553,7 @@ locals {
       short_name   = "dynamic-python-webapp"
       org          = "GoogleCloudPlatform"
       description  = "Deploy a dynamic python webapp"
-      owners       = "@glasnt @donmccasland"
+      owners       = ["glasnt", "donmccasland"]
       homepage_url = "avocano.dev"
     },
     {
@@ -539,34 +561,69 @@ locals {
       short_name  = "deploy-java-multizone"
       org         = "GoogleCloudPlatform"
       description = "Deploy a multizone Java application"
-      owners      = "@donmccasland"
+      owners      = ["donmccasland"]
     },
     {
       name        = "terraform-google-itar-architectures"
       org         = "GoogleCloudPlatform"
       description = "Includes use cases for deploying ITAR-aligned architectures on Google Cloud"
-      owners      = "@gtsorbo"
+      owners      = ["gtsorbo"]
       topics      = join(",", [local.common_topics.compute], ["compliance"])
     },
     {
       name        = "Migrate-Legacy-Java-App-GKE"
       org         = "HSA-Integration"
       description = "TODO"
-      owners      = "@donmccasland"
+      owners      = ["donmccasland"]
     },
     {
       name        = "terraform-google-analytics-lakehouse"
       org         = "GoogleCloudPlatform"
       description = "Deploys a Lakehouse Architecture Solution"
-      owners      = "@stevewalker-de"
+      owners      = ["stevewalker-de"]
       topics      = local.common_topics.da
     },
     {
       name        = "terraform-google-alloy-db"
       org         = "GoogleCloudPlatform"
       description = "Creates an Alloy DB instance"
-      owners      = "@anaik91"
+      owners      = ["anaik91", "imrannayer"]
       topics      = local.common_topics.db
+    },
+    {
+      name        = "terraform-google-cloud-ids"
+      org         = "GoogleCloudPlatform"
+      description = "Deploys a Cloud IDS instance and associated resources."
+      owners      = ["gtsorbo", "mgaur10"]
+      topics      = join(",", [local.common_topics.security, local.common_topics.net])
+    },
+    {
+      name        = "terraform-example-deploy-java-gke"
+      short_name  = "deploy-java-gke"
+      org         = "GoogleCloudPlatform"
+      description = "Deploy a Legacy Java App GKE"
+      owners      = ["donmccasland"]
+    },
+    {
+      name        = "terraform-google-crmint"
+      org         = "GoogleCloudPlatform"
+      description = "Deploy the Marketing Analytics application CRMint"
+      owners      = ["dulacp"]
+      topics      = join(",", [local.common_topics.da, local.common_topics.e2e], ["marketing"])
+    },
+    {
+      name        = "terraform-large-data-sharing-java-webapp"
+      short_name  = "large-data-sharing-java-app"
+      org         = "GoogleCloudPlatform"
+      description = "Deploys a large data sharing Java web app"
+      groups      = ["torus-dpe", "dee-platform-ops", "dee-data-ai"]
+    },
+    {
+      name        = "terraform-large-data-sharing-golang-webapp"
+      short_name  = "large-data-sharing-go-app"
+      org         = "GoogleCloudPlatform"
+      description = "Deploys a large data sharing Golang web app"
+      groups      = ["torus-dpe", "dee-platform-ops", "dee-data-ai"]
     },
   ]
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Google LLC
+ * Copyright 2022-2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,137 +17,151 @@
 locals {
   tgm_modules_map = { for value in local.modules : value.name => value if value.org == "terraform-google-modules" }
   gcp_modules_map = { for value in local.modules : value.name => value if value.org == "GoogleCloudPlatform" }
+  users           = distinct(flatten([for value in local.modules : value.owners if try(value.owners, null) != null]))
+}
+
+data "github_team" "cft-admins" {
+  slug     = "cft-admins"
+  provider = github
+}
+
+data "github_team" "blueprint-solutions" {
+  slug     = "blueprint-solutions"
+  provider = github.gcp
 }
 
 module "repos_tgm" {
   source    = "../../modules/repositories"
   repos_map = local.tgm_modules_map
-  providers = {
-    github = github
-  }
+  team_id   = module.collaborators_tgm.id
+  providers = { github = github }
 }
 
 module "repos_gcp" {
   source    = "../../modules/repositories"
   repos_map = local.gcp_modules_map
-  providers = {
-    github = github.gcp
-  }
+  # TODO: filter team on users already part of the org
+  # team_id   = module.collaborators_gcp.id
+  providers = { github = github.gcp }
 }
 
 // terraform-example-foundation CI is a special case - below
 module "branch_protection_tgm" {
   source    = "../../modules/branch_protection"
-  org       = "terraform-google-modules"
-  repo_list = setsubtract(module.repos_tgm.repos, ["terraform-example-foundation"])
-  admin     = "cft-admins"
+  repo_list = { for k, v in module.repos_tgm.repos : k => v if k != "terraform-example-foundation" }
+  admin     = data.github_team.cft-admins.node_id
+  providers = { github = github }
 }
 
 module "branch_protection_gcp" {
   source    = "../../modules/branch_protection"
-  org       = "GoogleCloudPlatform"
   repo_list = module.repos_gcp.repos
-  admin     = "blueprint-solutions"
+  admin     = data.github_team.blueprint-solutions.node_id
+  providers = { github = github.gcp }
 }
 
-// terraform-example-foundation renovate is a special case - manual
+// terraform-example-foundation renovate is a special case - below
 module "renovate_json_tgm" {
   source    = "../../modules/repo_file"
-  org       = "terraform-google-modules"
-  repo_list = setsubtract(module.repos_tgm.repos, ["terraform-example-foundation"])
+  repo_list = { for k, v in module.repos_tgm.repos : k => v if k != "terraform-example-foundation" }
   filename  = ".github/renovate.json"
   content   = file("${path.module}/resources/renovate.json")
+  providers = { github = github }
 }
 
 module "renovate_json_gcp" {
   source    = "../../modules/repo_file"
-  org       = "GoogleCloudPlatform"
   repo_list = module.repos_gcp.repos
   filename  = ".github/renovate.json"
   content   = file("${path.module}/resources/renovate.json")
+  providers = { github = github.gcp }
 }
 
 module "stale_yml_tgm" {
   source    = "../../modules/repo_file"
-  org       = "terraform-google-modules"
   repo_list = module.repos_tgm.repos
   filename  = ".github/workflows/stale.yml"
   content   = file("${path.module}/resources/stale.yml")
+  providers = { github = github }
 }
 
 module "stale_yml_gcp" {
   source    = "../../modules/repo_file"
-  org       = "GoogleCloudPlatform"
   repo_list = module.repos_gcp.repos
   filename  = ".github/workflows/stale.yml"
   content   = file("${path.module}/resources/stale.yml")
+  providers = { github = github.gcp }
 }
 
 module "conventional-commit-lint_yaml_tgm" {
   source    = "../../modules/repo_file"
-  org       = "terraform-google-modules"
   repo_list = module.repos_tgm.repos
   filename  = ".github/conventional-commit-lint.yaml"
   content   = file("${path.module}/resources/conventional-commit-lint.yaml")
+  providers = { github = github }
 }
 
 module "conventional-commit-lint_yaml_gcp" {
   source    = "../../modules/repo_file"
-  org       = "GoogleCloudPlatform"
   repo_list = module.repos_gcp.repos
   filename  = ".github/conventional-commit-lint.yaml"
   content   = file("${path.module}/resources/conventional-commit-lint.yaml")
+  providers = { github = github.gcp }
 }
 
 module "trusted-contribution_yml_tgm" {
   source    = "../../modules/repo_file"
-  org       = "terraform-google-modules"
   repo_list = module.repos_tgm.repos
   filename  = ".github/trusted-contribution.yml"
   content   = file("${path.module}/resources/trusted-contribution.yml")
+  providers = { github = github }
 }
 
 module "trusted-contribution_yml_gcp" {
   source    = "../../modules/repo_file"
-  org       = "GoogleCloudPlatform"
   repo_list = module.repos_gcp.repos
   filename  = ".github/trusted-contribution.yml"
   content   = file("${path.module}/resources/trusted-contribution.yml")
+  providers = { github = github.gcp }
 }
 
 module "codeowners_tgm" {
-  source = "../../modules/codeowners_file"
-  org    = "terraform-google-modules"
-  providers = {
-    github = github
-  }
+  source    = "../../modules/codeowners_file"
+  org       = "terraform-google-modules"
+  providers = { github = github }
   owner     = "cft-admins"
   repos_map = local.tgm_modules_map
+  repo_list = module.repos_tgm.repos
 }
 
 module "codeowners_gcp" {
-  source = "../../modules/codeowners_file"
-  org    = "GoogleCloudPlatform"
-  providers = {
-    github = github.gcp
-  }
+  source    = "../../modules/codeowners_file"
+  org       = "GoogleCloudPlatform"
+  providers = { github = github.gcp }
   owner     = "blueprint-solutions"
   repos_map = local.gcp_modules_map
+  repo_list = module.repos_gcp.repos
+}
+
+module "lint_yaml_tgm" {
+  source    = "../../modules/lint_file"
+  repos_map = local.tgm_modules_map
+  repo_list = module.repos_tgm.repos
+  providers = { github = github }
+}
+
+module "lint_yaml_gcp" {
+  source    = "../../modules/lint_file"
+  repos_map = local.gcp_modules_map
+  repo_list = module.repos_gcp.repos
+  providers = { github = github.gcp }
 }
 
 # Special CI/branch protection case
 
-data "github_team" "cft-admins" {
-  slug = "cft-admins"
-}
-
-data "github_repository" "terraform-example-foundation" {
-  name = "terraform-example-foundation"
-}
-
 resource "github_branch_protection" "terraform-example-foundation" {
-  repository_id = data.github_repository.terraform-example-foundation.node_id
-  pattern       = data.github_repository.terraform-example-foundation.default_branch
+  repository_id = module.repos_tgm.repos["terraform-example-foundation"].node_id
+  pattern       = module.repos_tgm.repos["terraform-example-foundation"].default_branch
 
   required_pull_request_reviews {
     required_approving_review_count = 1
@@ -160,7 +174,7 @@ resource "github_branch_protection" "terraform-example-foundation" {
       "cla/google",
       "terraform-example-foundation-int-trigger-default (cloud-foundation-cicd)",
       "terraform-example-foundation-int-trigger-HubAndSpoke (cloud-foundation-cicd)",
-      "terraform-example-foundation-lint-trigger (cloud-foundation-cicd)",
+      "lint",
       "conventionalcommits.org"
     ]
   }
@@ -171,4 +185,11 @@ resource "github_branch_protection" "terraform-example-foundation" {
     data.github_team.cft-admins.node_id
   ]
 
+}
+
+# collaborator teams for approved CI
+module "collaborators_tgm" {
+  source    = "../../modules/team"
+  users     = local.users
+  providers = { github = github }
 }

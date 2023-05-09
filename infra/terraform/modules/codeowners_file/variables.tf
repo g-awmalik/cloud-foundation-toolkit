@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Google LLC
+ * Copyright 2022-2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,5 +31,15 @@ variable "owner" {
 
 variable "repos_map" {
   description = "Map of Repos"
-  type        = map(map(string))
+  type = map(object({
+    name   = string
+    org    = string
+    owners = optional(list(string), [])
+    groups = optional(list(string), [])
+  }))
+}
+
+variable "repo_list" {
+  description = "List of Repos"
+  type        = map(any)
 }

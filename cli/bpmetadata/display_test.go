@@ -41,18 +41,15 @@ func TestUIInputFromVariables(t *testing.T) {
 				},
 			},
 			UIinput: &BlueprintUIInput{
-				DisplayVariables: map[string]*DisplayVariable{
+				Variables: map[string]*DisplayVariable{
 					"test_var_1": {
-						Name:    "test_var_1",
-						Visible: true,
+						Name: "test_var_1",
 					},
 					"test_var_2": {
-						Name:    "test_var_2",
-						Visible: true,
+						Name: "test_var_2",
 					},
 					"test_var_3": {
-						Name:    "test_var_3",
-						Visible: true,
+						Name: "test_var_3",
 					},
 				},
 			},
@@ -71,18 +68,15 @@ func TestUIInputFromVariables(t *testing.T) {
 				},
 			},
 			UIinput: &BlueprintUIInput{
-				DisplayVariables: map[string]*DisplayVariable{
+				Variables: map[string]*DisplayVariable{
 					"test_var_1": {
-						Name:    "test_var_1",
-						Visible: true,
+						Name: "test_var_1",
 					},
 					"test_var_2": {
-						Name:    "test_var_2",
-						Visible: true,
+						Name: "test_var_2",
 					},
 					"test_var_3": {
-						Name:    "test_var_3",
-						Visible: true,
+						Name: "test_var_3",
 					},
 				},
 			},
@@ -92,12 +86,45 @@ func TestUIInputFromVariables(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			buildUIInputFromVariables(tt.coreVars, tt.UIinput)
 			for _, v := range tt.coreVars {
-				dispVar := tt.UIinput.DisplayVariables[v.Name]
+				dispVar := tt.UIinput.Variables[v.Name]
 				assert.NotNil(t, dispVar)
 				assert.Equal(t, v.Name, dispVar.Name)
 			}
 
-			assert.GreaterOrEqual(t, len(tt.UIinput.DisplayVariables), len(tt.coreVars))
+			assert.GreaterOrEqual(t, len(tt.UIinput.Variables), len(tt.coreVars))
+		})
+	}
+}
+
+func TestCreateTitleFromName(t *testing.T) {
+	tests := []struct {
+		name      string
+		inputName string
+		wantTitle string
+	}{
+		{
+			name:      "name with underscores",
+			inputName: "foo_bar_baz",
+			wantTitle: "Foo Bar Baz",
+		},
+		{
+			name:      "name with underscores w/ numbers",
+			inputName: "foo_bar_baz_01",
+			wantTitle: "Foo Bar Baz 01",
+		},
+		{
+			name:      "name w/o underscores",
+			inputName: "FooBarBaz",
+			wantTitle: "FooBarBaz",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := createTitleFromName(tt.inputName)
+			if got != tt.wantTitle {
+				t.Errorf("createTitleFromName() = %v, want %v", got, tt.wantTitle)
+			}
 		})
 	}
 }

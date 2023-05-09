@@ -1,5 +1,5 @@
 /**
- * Copyright 2022 Google LLC
+ * Copyright 2022-2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-provider "github" {
-  owner = var.org
-}
-
-data "github_team" "admin" {
-  slug = var.admin
-}
-
-data "github_repository" "repo" {
-  for_each = toset(var.repo_list)
-  name     = each.value
-}
-
 resource "github_branch_protection" "default" {
-  for_each      = data.github_repository.repo
+  for_each      = var.repo_list
   repository_id = each.value.node_id
   pattern       = each.value.default_branch
 
@@ -41,8 +28,8 @@ resource "github_branch_protection" "default" {
     strict = true
     contexts = [
       "cla/google",
-      "${each.value.name}-int-trigger (cloud-foundation-cicd)",
-      "${each.value.name}-lint-trigger (cloud-foundation-cicd)",
+      "${each.key}-int-trigger (cloud-foundation-cicd)",
+      "lint",
       "conventionalcommits.org"
     ]
   }
@@ -51,7 +38,7 @@ resource "github_branch_protection" "default" {
   blocks_creations = false
 
   push_restrictions = [
-    data.github_team.admin.node_id
+    var.admin
   ]
 
 }
