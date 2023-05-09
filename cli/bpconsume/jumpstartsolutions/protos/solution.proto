@@ -77,6 +77,25 @@ message Property {
   string default_value = 12;
   // Whether the property is required for the deployment or not.
   bool is_required = 22;
+
+  string validation = 6;
+
+  // Validation for string type properties.
+  string pattern = 14;
+  int32 max_length = 15;
+  int32 min_length = 16;
+
+  // Validation for integer types.
+  float maximum = 17;
+  float minimum = 18;
+
+  // Validation for array values.
+  int32 max_items = 19;
+  int32 min_items = 20;
+
+  // Whether the property is hidden.
+  bool is_hidden = 23;
+
 }
 
 message DeploymentLink {
