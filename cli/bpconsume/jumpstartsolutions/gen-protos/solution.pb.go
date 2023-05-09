@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.30.0
 // 	protoc        v3.21.12
-// source: protos/solution.proto
+// source: bpconsume/jumpstartsolutions/protos/solution.proto
 
 package gen_protos
 
@@ -59,11 +59,11 @@ func (x Property_Type) String() string {
 }
 
 func (Property_Type) Descriptor() protoreflect.EnumDescriptor {
-	return file_solution_proto_enumTypes[0].Descriptor()
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_enumTypes[0].Descriptor()
 }
 
 func (Property_Type) Type() protoreflect.EnumType {
-	return &file_solution_proto_enumTypes[0]
+	return &file_bpconsume_jumpstartsolutions_protos_solution_proto_enumTypes[0]
 }
 
 func (x Property_Type) Number() protoreflect.EnumNumber {
@@ -72,7 +72,77 @@ func (x Property_Type) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Property_Type.Descriptor instead.
 func (Property_Type) EnumDescriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{4, 0}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{4, 0}
+}
+
+type DeployData_DeployLocationConfig int32
+
+const (
+	DeployData_UNSPECIFIED            DeployData_DeployLocationConfig = 0
+	DeployData_BIGQUERY_DATASET       DeployData_DeployLocationConfig = 1
+	DeployData_BIGQUERY_DATA_TRANSFER DeployData_DeployLocationConfig = 2
+	DeployData_CLOUD_BUILD            DeployData_DeployLocationConfig = 3
+	DeployData_CLOUD_DEPLOY           DeployData_DeployLocationConfig = 4
+	DeployData_CLOUD_FUNCTIONS_V2     DeployData_DeployLocationConfig = 5
+	DeployData_CLOUD_MEMORYSTORE      DeployData_DeployLocationConfig = 6
+	DeployData_CLOUD_RUN              DeployData_DeployLocationConfig = 7
+	DeployData_COMPUTE                DeployData_DeployLocationConfig = 8
+	DeployData_TRANSCODER_API         DeployData_DeployLocationConfig = 9
+)
+
+// Enum value maps for DeployData_DeployLocationConfig.
+var (
+	DeployData_DeployLocationConfig_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "BIGQUERY_DATASET",
+		2: "BIGQUERY_DATA_TRANSFER",
+		3: "CLOUD_BUILD",
+		4: "CLOUD_DEPLOY",
+		5: "CLOUD_FUNCTIONS_V2",
+		6: "CLOUD_MEMORYSTORE",
+		7: "CLOUD_RUN",
+		8: "COMPUTE",
+		9: "TRANSCODER_API",
+	}
+	DeployData_DeployLocationConfig_value = map[string]int32{
+		"UNSPECIFIED":            0,
+		"BIGQUERY_DATASET":       1,
+		"BIGQUERY_DATA_TRANSFER": 2,
+		"CLOUD_BUILD":            3,
+		"CLOUD_DEPLOY":           4,
+		"CLOUD_FUNCTIONS_V2":     5,
+		"CLOUD_MEMORYSTORE":      6,
+		"CLOUD_RUN":              7,
+		"COMPUTE":                8,
+		"TRANSCODER_API":         9,
+	}
+)
+
+func (x DeployData_DeployLocationConfig) Enum() *DeployData_DeployLocationConfig {
+	p := new(DeployData_DeployLocationConfig)
+	*p = x
+	return p
+}
+
+func (x DeployData_DeployLocationConfig) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DeployData_DeployLocationConfig) Descriptor() protoreflect.EnumDescriptor {
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_enumTypes[1].Descriptor()
+}
+
+func (DeployData_DeployLocationConfig) Type() protoreflect.EnumType {
+	return &file_bpconsume_jumpstartsolutions_protos_solution_proto_enumTypes[1]
+}
+
+func (x DeployData_DeployLocationConfig) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DeployData_DeployLocationConfig.Descriptor instead.
+func (DeployData_DeployLocationConfig) EnumDescriptor() ([]byte, []int) {
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{9, 0}
 }
 
 type Solution struct {
@@ -85,14 +155,24 @@ type Solution struct {
 	// Estimated time to deploy this Solution.
 	DeploymentEstimate *DeploymentEstimate `protobuf:"bytes,10,opt,name=deployment_estimate,json=deploymentEstimate,proto3" json:"deployment_estimate,omitempty"`
 	// link to GCP pricing calculator.
-	CostEstimateLink string      `protobuf:"bytes,16,opt,name=cost_estimate_link,json=costEstimateLink,proto3" json:"cost_estimate_link,omitempty"`
-	DeployData       *DeployData `protobuf:"bytes,14,opt,name=deploy_data,json=deployData,proto3" json:"deploy_data,omitempty"`
+	CostEstimateLink string `protobuf:"bytes,16,opt,name=cost_estimate_link,json=costEstimateLink,proto3" json:"cost_estimate_link,omitempty"`
+	// Fully qualified URL for the Solution's icon image
+	IconUrl string `protobuf:"bytes,3,opt,name=icon_url,json=iconUrl,proto3" json:"icon_url,omitempty"`
+	// Fully qualified URL for the image showing the diagram of the solution
+	DiagramUrl string `protobuf:"bytes,7,opt,name=diagram_url,json=diagramUrl,proto3" json:"diagram_url,omitempty"`
+	// Fully qualified URL linking to documentation for this Solution.
+	DocumentationLink string `protobuf:"bytes,12,opt,name=documentation_link,json=documentationLink,proto3" json:"documentation_link,omitempty"`
+	// Monthly cost estimate for the solution from the GCP pricing calculator.
+	CostEstimateUsd float64 `protobuf:"fixed64,17,opt,name=cost_estimate_usd,json=costEstimateUsd,proto3" json:"cost_estimate_usd,omitempty"`
+	// List of products used in this solution.
+	CloudProductIdentifiers []*CloudProductIdentifier `protobuf:"bytes,15,rep,name=cloud_product_identifiers,json=cloudProductIdentifiers,proto3" json:"cloud_product_identifiers,omitempty"`
+	DeployData              *DeployData               `protobuf:"bytes,14,opt,name=deploy_data,json=deployData,proto3" json:"deploy_data,omitempty"`
 }
 
 func (x *Solution) Reset() {
 	*x = Solution{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[0]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -105,7 +185,7 @@ func (x *Solution) String() string {
 func (*Solution) ProtoMessage() {}
 
 func (x *Solution) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[0]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +198,7 @@ func (x *Solution) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Solution.ProtoReflect.Descriptor instead.
 func (*Solution) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{0}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Solution) GetGitSource() *GitSource {
@@ -140,6 +220,41 @@ func (x *Solution) GetCostEstimateLink() string {
 		return x.CostEstimateLink
 	}
 	return ""
+}
+
+func (x *Solution) GetIconUrl() string {
+	if x != nil {
+		return x.IconUrl
+	}
+	return ""
+}
+
+func (x *Solution) GetDiagramUrl() string {
+	if x != nil {
+		return x.DiagramUrl
+	}
+	return ""
+}
+
+func (x *Solution) GetDocumentationLink() string {
+	if x != nil {
+		return x.DocumentationLink
+	}
+	return ""
+}
+
+func (x *Solution) GetCostEstimateUsd() float64 {
+	if x != nil {
+		return x.CostEstimateUsd
+	}
+	return 0
+}
+
+func (x *Solution) GetCloudProductIdentifiers() []*CloudProductIdentifier {
+	if x != nil {
+		return x.CloudProductIdentifiers
+	}
+	return nil
 }
 
 func (x *Solution) GetDeployData() *DeployData {
@@ -168,7 +283,7 @@ type GitSource struct {
 func (x *GitSource) Reset() {
 	*x = GitSource{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[1]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -181,7 +296,7 @@ func (x *GitSource) String() string {
 func (*GitSource) ProtoMessage() {}
 
 func (x *GitSource) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[1]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -194,7 +309,7 @@ func (x *GitSource) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GitSource.ProtoReflect.Descriptor instead.
 func (*GitSource) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{1}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GitSource) GetRepo() string {
@@ -232,7 +347,7 @@ type DeploymentEstimate struct {
 func (x *DeploymentEstimate) Reset() {
 	*x = DeploymentEstimate{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[2]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -245,7 +360,7 @@ func (x *DeploymentEstimate) String() string {
 func (*DeploymentEstimate) ProtoMessage() {}
 
 func (x *DeploymentEstimate) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[2]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -258,7 +373,7 @@ func (x *DeploymentEstimate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeploymentEstimate.ProtoReflect.Descriptor instead.
 func (*DeploymentEstimate) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{2}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *DeploymentEstimate) GetConfigurationMinutes() int32 {
@@ -287,7 +402,7 @@ type Section struct {
 func (x *Section) Reset() {
 	*x = Section{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[3]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -300,7 +415,7 @@ func (x *Section) String() string {
 func (*Section) ProtoMessage() {}
 
 func (x *Section) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[3]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -313,7 +428,7 @@ func (x *Section) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Section.ProtoReflect.Descriptor instead.
 func (*Section) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{3}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Section) GetProperties() []*Property {
@@ -357,7 +472,7 @@ type Property struct {
 func (x *Property) Reset() {
 	*x = Property{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[4]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -370,7 +485,7 @@ func (x *Property) String() string {
 func (*Property) ProtoMessage() {}
 
 func (x *Property) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[4]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -383,7 +498,7 @@ func (x *Property) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Property.ProtoReflect.Descriptor instead.
 func (*Property) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{4}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Property) GetName() string {
@@ -494,7 +609,7 @@ type DeploymentLink struct {
 func (x *DeploymentLink) Reset() {
 	*x = DeploymentLink{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[5]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -507,7 +622,7 @@ func (x *DeploymentLink) String() string {
 func (*DeploymentLink) ProtoMessage() {}
 
 func (x *DeploymentLink) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[5]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -520,7 +635,7 @@ func (x *DeploymentLink) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeploymentLink.ProtoReflect.Descriptor instead.
 func (*DeploymentLink) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{5}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DeploymentLink) GetOutputName() string {
@@ -551,6 +666,180 @@ func (x *DeploymentLink) GetOpenInNewTab() bool {
 	return false
 }
 
+type OrgPolicyCheck struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Required for listPolicy types.
+	RequiredValues []string `protobuf:"bytes,2,rep,name=required_values,json=requiredValues,proto3" json:"required_values,omitempty"`
+}
+
+func (x *OrgPolicyCheck) Reset() {
+	*x = OrgPolicyCheck{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OrgPolicyCheck) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrgPolicyCheck) ProtoMessage() {}
+
+func (x *OrgPolicyCheck) ProtoReflect() protoreflect.Message {
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrgPolicyCheck.ProtoReflect.Descriptor instead.
+func (*OrgPolicyCheck) Descriptor() ([]byte, []int) {
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *OrgPolicyCheck) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *OrgPolicyCheck) GetRequiredValues() []string {
+	if x != nil {
+		return x.RequiredValues
+	}
+	return nil
+}
+
+type CloudProductIdentifier struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ConsoleProductIdentifier *ConsoleProductIdentifier `protobuf:"bytes,1,opt,name=console_product_identifier,json=consoleProductIdentifier,proto3" json:"console_product_identifier,omitempty"`
+	Label                    string                    `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+}
+
+func (x *CloudProductIdentifier) Reset() {
+	*x = CloudProductIdentifier{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CloudProductIdentifier) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CloudProductIdentifier) ProtoMessage() {}
+
+func (x *CloudProductIdentifier) ProtoReflect() protoreflect.Message {
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CloudProductIdentifier.ProtoReflect.Descriptor instead.
+func (*CloudProductIdentifier) Descriptor() ([]byte, []int) {
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CloudProductIdentifier) GetConsoleProductIdentifier() *ConsoleProductIdentifier {
+	if x != nil {
+		return x.ConsoleProductIdentifier
+	}
+	return nil
+}
+
+func (x *CloudProductIdentifier) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+type ConsoleProductIdentifier struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SectionId                   string `protobuf:"bytes,1,opt,name=section_id,json=sectionId,proto3" json:"section_id,omitempty"`
+	PageId                      string `protobuf:"bytes,2,opt,name=page_id,json=pageId,proto3" json:"page_id,omitempty"`
+	PageIdForPostDeploymentLink string `protobuf:"bytes,3,opt,name=page_id_for_post_deployment_link,json=pageIdForPostDeploymentLink,proto3" json:"page_id_for_post_deployment_link,omitempty"`
+}
+
+func (x *ConsoleProductIdentifier) Reset() {
+	*x = ConsoleProductIdentifier{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ConsoleProductIdentifier) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConsoleProductIdentifier) ProtoMessage() {}
+
+func (x *ConsoleProductIdentifier) ProtoReflect() protoreflect.Message {
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConsoleProductIdentifier.ProtoReflect.Descriptor instead.
+func (*ConsoleProductIdentifier) Descriptor() ([]byte, []int) {
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ConsoleProductIdentifier) GetSectionId() string {
+	if x != nil {
+		return x.SectionId
+	}
+	return ""
+}
+
+func (x *ConsoleProductIdentifier) GetPageId() string {
+	if x != nil {
+		return x.PageId
+	}
+	return ""
+}
+
+func (x *ConsoleProductIdentifier) GetPageIdForPostDeploymentLink() string {
+	if x != nil {
+		return x.PageIdForPostDeploymentLink
+	}
+	return ""
+}
+
 type DeployData struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -566,12 +855,17 @@ type DeployData struct {
 	// APIs required by the service account deploying the solution in the form
 	// "compute.googleapis.com".
 	Apis []string `protobuf:"bytes,1,rep,name=apis,proto3" json:"apis,omitempty"`
+	// If true, this solution should not have multiple concurrent deployments in
+	// the same project.
+	IsSingleton     bool                              `protobuf:"varint,5,opt,name=is_singleton,json=isSingleton,proto3" json:"is_singleton,omitempty"`
+	OrgPolicyChecks []*OrgPolicyCheck                 `protobuf:"bytes,8,rep,name=org_policy_checks,json=orgPolicyChecks,proto3" json:"org_policy_checks,omitempty"`
+	LocationConfigs []DeployData_DeployLocationConfig `protobuf:"varint,4,rep,packed,name=location_configs,json=locationConfigs,proto3,enum=DeployData_DeployLocationConfig" json:"location_configs,omitempty"`
 }
 
 func (x *DeployData) Reset() {
 	*x = DeployData{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_solution_proto_msgTypes[6]
+		mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[9]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -584,7 +878,7 @@ func (x *DeployData) String() string {
 func (*DeployData) ProtoMessage() {}
 
 func (x *DeployData) ProtoReflect() protoreflect.Message {
-	mi := &file_solution_proto_msgTypes[6]
+	mi := &file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[9]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -597,7 +891,7 @@ func (x *DeployData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeployData.ProtoReflect.Descriptor instead.
 func (*DeployData) Descriptor() ([]byte, []int) {
-	return file_solution_proto_rawDescGZIP(), []int{6}
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeployData) GetInputSections() []*Section {
@@ -628,21 +922,59 @@ func (x *DeployData) GetApis() []string {
 	return nil
 }
 
-var File_solution_proto protoreflect.FileDescriptor
+func (x *DeployData) GetIsSingleton() bool {
+	if x != nil {
+		return x.IsSingleton
+	}
+	return false
+}
 
-var file_solution_proto_rawDesc = []byte{
-	0x0a, 0x0e, 0x73, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x22, 0xd7, 0x01, 0x0a, 0x08, 0x53, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x29, 0x0a,
-	0x0a, 0x67, 0x69, 0x74, 0x5f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x0d, 0x20, 0x01, 0x28,
-	0x0b, 0x32, 0x0a, 0x2e, 0x47, 0x69, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x52, 0x09, 0x67,
-	0x69, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x44, 0x0a, 0x13, 0x64, 0x65, 0x70, 0x6c,
-	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x18,
-	0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65,
-	0x6e, 0x74, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x52, 0x12, 0x64, 0x65, 0x70, 0x6c,
-	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x12, 0x2c,
-	0x0a, 0x12, 0x63, 0x6f, 0x73, 0x74, 0x5f, 0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x5f,
-	0x6c, 0x69, 0x6e, 0x6b, 0x18, 0x10, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10, 0x63, 0x6f, 0x73, 0x74,
-	0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x4c, 0x69, 0x6e, 0x6b, 0x12, 0x2c, 0x0a, 0x0b,
+func (x *DeployData) GetOrgPolicyChecks() []*OrgPolicyCheck {
+	if x != nil {
+		return x.OrgPolicyChecks
+	}
+	return nil
+}
+
+func (x *DeployData) GetLocationConfigs() []DeployData_DeployLocationConfig {
+	if x != nil {
+		return x.LocationConfigs
+	}
+	return nil
+}
+
+var File_bpconsume_jumpstartsolutions_protos_solution_proto protoreflect.FileDescriptor
+
+var file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDesc = []byte{
+	0x0a, 0x32, 0x62, 0x70, 0x63, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x65, 0x2f, 0x6a, 0x75, 0x6d, 0x70,
+	0x73, 0x74, 0x61, 0x72, 0x74, 0x73, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2f, 0x73, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x22, 0xc3, 0x03, 0x0a, 0x08, 0x53, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x29, 0x0a, 0x0a, 0x67, 0x69, 0x74, 0x5f, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18,
+	0x0d, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x47, 0x69, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x52, 0x09, 0x67, 0x69, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x44, 0x0a, 0x13,
+	0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x65, 0x73, 0x74, 0x69, 0x6d,
+	0x61, 0x74, 0x65, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x44, 0x65, 0x70, 0x6c,
+	0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x52, 0x12,
+	0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61,
+	0x74, 0x65, 0x12, 0x2c, 0x0a, 0x12, 0x63, 0x6f, 0x73, 0x74, 0x5f, 0x65, 0x73, 0x74, 0x69, 0x6d,
+	0x61, 0x74, 0x65, 0x5f, 0x6c, 0x69, 0x6e, 0x6b, 0x18, 0x10, 0x20, 0x01, 0x28, 0x09, 0x52, 0x10,
+	0x63, 0x6f, 0x73, 0x74, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x4c, 0x69, 0x6e, 0x6b,
+	0x12, 0x19, 0x0a, 0x08, 0x69, 0x63, 0x6f, 0x6e, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x69, 0x63, 0x6f, 0x6e, 0x55, 0x72, 0x6c, 0x12, 0x1f, 0x0a, 0x0b, 0x64,
+	0x69, 0x61, 0x67, 0x72, 0x61, 0x6d, 0x5f, 0x75, 0x72, 0x6c, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x0a, 0x64, 0x69, 0x61, 0x67, 0x72, 0x61, 0x6d, 0x55, 0x72, 0x6c, 0x12, 0x2d, 0x0a, 0x12,
+	0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65, 0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x6c, 0x69,
+	0x6e, 0x6b, 0x18, 0x0c, 0x20, 0x01, 0x28, 0x09, 0x52, 0x11, 0x64, 0x6f, 0x63, 0x75, 0x6d, 0x65,
+	0x6e, 0x74, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x69, 0x6e, 0x6b, 0x12, 0x2a, 0x0a, 0x11, 0x63,
+	0x6f, 0x73, 0x74, 0x5f, 0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x65, 0x5f, 0x75, 0x73, 0x64,
+	0x18, 0x11, 0x20, 0x01, 0x28, 0x01, 0x52, 0x0f, 0x63, 0x6f, 0x73, 0x74, 0x45, 0x73, 0x74, 0x69,
+	0x6d, 0x61, 0x74, 0x65, 0x55, 0x73, 0x64, 0x12, 0x53, 0x0a, 0x19, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x5f, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x5f, 0x69, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66,
+	0x69, 0x65, 0x72, 0x73, 0x18, 0x0f, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x43, 0x6c, 0x6f,
+	0x75, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66,
+	0x69, 0x65, 0x72, 0x52, 0x17, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63,
+	0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x73, 0x12, 0x2c, 0x0a, 0x0b,
 	0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x5f, 0x64, 0x61, 0x74, 0x61, 0x18, 0x0e, 0x20, 0x01, 0x28,
 	0x0b, 0x32, 0x0b, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0a,
 	0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x44, 0x61, 0x74, 0x61, 0x22, 0x4f, 0x0a, 0x09, 0x47, 0x69,
@@ -702,71 +1034,126 @@ var file_solution_proto_rawDesc = []byte{
 	0x6e, 0x4e, 0x6f, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x25, 0x0a,
 	0x0f, 0x6f, 0x70, 0x65, 0x6e, 0x5f, 0x69, 0x6e, 0x5f, 0x6e, 0x65, 0x77, 0x5f, 0x74, 0x61, 0x62,
 	0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0c, 0x6f, 0x70, 0x65, 0x6e, 0x49, 0x6e, 0x4e, 0x65,
-	0x77, 0x54, 0x61, 0x62, 0x22, 0x8e, 0x01, 0x0a, 0x0a, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x44,
-	0x61, 0x74, 0x61, 0x12, 0x2f, 0x0a, 0x0e, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x5f, 0x73, 0x65, 0x63,
-	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x53, 0x65,
-	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0d, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x53, 0x65, 0x63, 0x74,
-	0x69, 0x6f, 0x6e, 0x73, 0x12, 0x25, 0x0a, 0x05, 0x6c, 0x69, 0x6e, 0x6b, 0x73, 0x18, 0x03, 0x20,
-	0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74,
-	0x4c, 0x69, 0x6e, 0x6b, 0x52, 0x05, 0x6c, 0x69, 0x6e, 0x6b, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x72,
-	0x6f, 0x6c, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x72, 0x6f, 0x6c, 0x65,
-	0x73, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x70, 0x69, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52,
-	0x04, 0x61, 0x70, 0x69, 0x73, 0x42, 0x65, 0x5a, 0x63, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x47, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x50,
-	0x6c, 0x61, 0x74, 0x66, 0x6f, 0x72, 0x6d, 0x2f, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2d, 0x66, 0x6f,
-	0x75, 0x6e, 0x64, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2d, 0x74, 0x6f, 0x6f, 0x6c, 0x6b, 0x69, 0x74,
-	0x2f, 0x63, 0x6c, 0x69, 0x2f, 0x62, 0x70, 0x63, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x65, 0x2f, 0x6a,
-	0x75, 0x6d, 0x70, 0x73, 0x74, 0x61, 0x72, 0x74, 0x73, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f, 0x6e,
-	0x73, 0x2f, 0x67, 0x65, 0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x77, 0x54, 0x61, 0x62, 0x22, 0x49, 0x0a, 0x0e, 0x4f, 0x72, 0x67, 0x50, 0x6f, 0x6c, 0x69, 0x63,
+	0x79, 0x43, 0x68, 0x65, 0x63, 0x6b, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x27, 0x0a, 0x0f, 0x72, 0x65, 0x71, 0x75, 0x69, 0x72,
+	0x65, 0x64, 0x5f, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52,
+	0x0e, 0x72, 0x65, 0x71, 0x75, 0x69, 0x72, 0x65, 0x64, 0x56, 0x61, 0x6c, 0x75, 0x65, 0x73, 0x22,
+	0x87, 0x01, 0x0a, 0x16, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74,
+	0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x12, 0x57, 0x0a, 0x1a, 0x63, 0x6f,
+	0x6e, 0x73, 0x6f, 0x6c, 0x65, 0x5f, 0x70, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x5f, 0x69, 0x64,
+	0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x19,
+	0x2e, 0x43, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x52, 0x18, 0x63, 0x6f, 0x6e, 0x73, 0x6f,
+	0x6c, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x66,
+	0x69, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x18, 0x02, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x05, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x22, 0x99, 0x01, 0x0a, 0x18, 0x43, 0x6f,
+	0x6e, 0x73, 0x6f, 0x6c, 0x65, 0x50, 0x72, 0x6f, 0x64, 0x75, 0x63, 0x74, 0x49, 0x64, 0x65, 0x6e,
+	0x74, 0x69, 0x66, 0x69, 0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a, 0x73, 0x65, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x73, 0x65, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x61, 0x67, 0x65, 0x49, 0x64, 0x12, 0x45,
+	0x0a, 0x20, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x69, 0x64, 0x5f, 0x66, 0x6f, 0x72, 0x5f, 0x70, 0x6f,
+	0x73, 0x74, 0x5f, 0x64, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x5f, 0x6c, 0x69,
+	0x6e, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x1b, 0x70, 0x61, 0x67, 0x65, 0x49, 0x64,
+	0x46, 0x6f, 0x72, 0x50, 0x6f, 0x73, 0x74, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e,
+	0x74, 0x4c, 0x69, 0x6e, 0x6b, 0x22, 0x99, 0x04, 0x0a, 0x0a, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79,
+	0x44, 0x61, 0x74, 0x61, 0x12, 0x2f, 0x0a, 0x0e, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x5f, 0x73, 0x65,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x08, 0x2e, 0x53,
+	0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0d, 0x69, 0x6e, 0x70, 0x75, 0x74, 0x53, 0x65, 0x63,
+	0x74, 0x69, 0x6f, 0x6e, 0x73, 0x12, 0x25, 0x0a, 0x05, 0x6c, 0x69, 0x6e, 0x6b, 0x73, 0x18, 0x03,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x6d, 0x65, 0x6e,
+	0x74, 0x4c, 0x69, 0x6e, 0x6b, 0x52, 0x05, 0x6c, 0x69, 0x6e, 0x6b, 0x73, 0x12, 0x14, 0x0a, 0x05,
+	0x72, 0x6f, 0x6c, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x05, 0x72, 0x6f, 0x6c,
+	0x65, 0x73, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x70, 0x69, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09,
+	0x52, 0x04, 0x61, 0x70, 0x69, 0x73, 0x12, 0x21, 0x0a, 0x0c, 0x69, 0x73, 0x5f, 0x73, 0x69, 0x6e,
+	0x67, 0x6c, 0x65, 0x74, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0b, 0x69, 0x73,
+	0x53, 0x69, 0x6e, 0x67, 0x6c, 0x65, 0x74, 0x6f, 0x6e, 0x12, 0x3b, 0x0a, 0x11, 0x6f, 0x72, 0x67,
+	0x5f, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x5f, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x73, 0x18, 0x08,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x4f, 0x72, 0x67, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79,
+	0x43, 0x68, 0x65, 0x63, 0x6b, 0x52, 0x0f, 0x6f, 0x72, 0x67, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79,
+	0x43, 0x68, 0x65, 0x63, 0x6b, 0x73, 0x12, 0x4b, 0x0a, 0x10, 0x6c, 0x6f, 0x63, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0e,
+	0x32, 0x20, 0x2e, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x44, 0x61, 0x74, 0x61, 0x2e, 0x44, 0x65,
+	0x70, 0x6c, 0x6f, 0x79, 0x4c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x52, 0x0f, 0x6c, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x73, 0x22, 0xdb, 0x01, 0x0a, 0x14, 0x44, 0x65, 0x70, 0x6c, 0x6f, 0x79, 0x4c, 0x6f,
+	0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x12, 0x0f, 0x0a, 0x0b,
+	0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x14, 0x0a,
+	0x10, 0x42, 0x49, 0x47, 0x51, 0x55, 0x45, 0x52, 0x59, 0x5f, 0x44, 0x41, 0x54, 0x41, 0x53, 0x45,
+	0x54, 0x10, 0x01, 0x12, 0x1a, 0x0a, 0x16, 0x42, 0x49, 0x47, 0x51, 0x55, 0x45, 0x52, 0x59, 0x5f,
+	0x44, 0x41, 0x54, 0x41, 0x5f, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x46, 0x45, 0x52, 0x10, 0x02, 0x12,
+	0x0f, 0x0a, 0x0b, 0x43, 0x4c, 0x4f, 0x55, 0x44, 0x5f, 0x42, 0x55, 0x49, 0x4c, 0x44, 0x10, 0x03,
+	0x12, 0x10, 0x0a, 0x0c, 0x43, 0x4c, 0x4f, 0x55, 0x44, 0x5f, 0x44, 0x45, 0x50, 0x4c, 0x4f, 0x59,
+	0x10, 0x04, 0x12, 0x16, 0x0a, 0x12, 0x43, 0x4c, 0x4f, 0x55, 0x44, 0x5f, 0x46, 0x55, 0x4e, 0x43,
+	0x54, 0x49, 0x4f, 0x4e, 0x53, 0x5f, 0x56, 0x32, 0x10, 0x05, 0x12, 0x15, 0x0a, 0x11, 0x43, 0x4c,
+	0x4f, 0x55, 0x44, 0x5f, 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59, 0x53, 0x54, 0x4f, 0x52, 0x45, 0x10,
+	0x06, 0x12, 0x0d, 0x0a, 0x09, 0x43, 0x4c, 0x4f, 0x55, 0x44, 0x5f, 0x52, 0x55, 0x4e, 0x10, 0x07,
+	0x12, 0x0b, 0x0a, 0x07, 0x43, 0x4f, 0x4d, 0x50, 0x55, 0x54, 0x45, 0x10, 0x08, 0x12, 0x12, 0x0a,
+	0x0e, 0x54, 0x52, 0x41, 0x4e, 0x53, 0x43, 0x4f, 0x44, 0x45, 0x52, 0x5f, 0x41, 0x50, 0x49, 0x10,
+	0x09, 0x42, 0x65, 0x5a, 0x63, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x47, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x50, 0x6c, 0x61, 0x74, 0x66,
+	0x6f, 0x72, 0x6d, 0x2f, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2d, 0x66, 0x6f, 0x75, 0x6e, 0x64, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x2d, 0x74, 0x6f, 0x6f, 0x6c, 0x6b, 0x69, 0x74, 0x2f, 0x63, 0x6c, 0x69,
+	0x2f, 0x62, 0x70, 0x63, 0x6f, 0x6e, 0x73, 0x75, 0x6d, 0x65, 0x2f, 0x6a, 0x75, 0x6d, 0x70, 0x73,
+	0x74, 0x61, 0x72, 0x74, 0x73, 0x6f, 0x6c, 0x75, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x67, 0x65,
+	0x6e, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_solution_proto_rawDescOnce sync.Once
-	file_solution_proto_rawDescData = file_solution_proto_rawDesc
+	file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescOnce sync.Once
+	file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescData = file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDesc
 )
 
-func file_solution_proto_rawDescGZIP() []byte {
-	file_solution_proto_rawDescOnce.Do(func() {
-		file_solution_proto_rawDescData = protoimpl.X.CompressGZIP(file_solution_proto_rawDescData)
+func file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescGZIP() []byte {
+	file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescOnce.Do(func() {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescData = protoimpl.X.CompressGZIP(file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescData)
 	})
-	return file_solution_proto_rawDescData
+	return file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDescData
 }
 
-var file_solution_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_solution_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
-var file_solution_proto_goTypes = []interface{}{
-	(Property_Type)(0),         // 0: Property.Type
-	(*Solution)(nil),           // 1: Solution
-	(*GitSource)(nil),          // 2: GitSource
-	(*DeploymentEstimate)(nil), // 3: DeploymentEstimate
-	(*Section)(nil),            // 4: Section
-	(*Property)(nil),           // 5: Property
-	(*DeploymentLink)(nil),     // 6: DeploymentLink
-	(*DeployData)(nil),         // 7: DeployData
+var file_bpconsume_jumpstartsolutions_protos_solution_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_bpconsume_jumpstartsolutions_protos_solution_proto_goTypes = []interface{}{
+	(Property_Type)(0),                   // 0: Property.Type
+	(DeployData_DeployLocationConfig)(0), // 1: DeployData.DeployLocationConfig
+	(*Solution)(nil),                     // 2: Solution
+	(*GitSource)(nil),                    // 3: GitSource
+	(*DeploymentEstimate)(nil),           // 4: DeploymentEstimate
+	(*Section)(nil),                      // 5: Section
+	(*Property)(nil),                     // 6: Property
+	(*DeploymentLink)(nil),               // 7: DeploymentLink
+	(*OrgPolicyCheck)(nil),               // 8: OrgPolicyCheck
+	(*CloudProductIdentifier)(nil),       // 9: CloudProductIdentifier
+	(*ConsoleProductIdentifier)(nil),     // 10: ConsoleProductIdentifier
+	(*DeployData)(nil),                   // 11: DeployData
 }
-var file_solution_proto_depIdxs = []int32{
-	2, // 0: Solution.git_source:type_name -> GitSource
-	3, // 1: Solution.deployment_estimate:type_name -> DeploymentEstimate
-	7, // 2: Solution.deploy_data:type_name -> DeployData
-	5, // 3: Section.properties:type_name -> Property
-	0, // 4: Property.type:type_name -> Property.Type
-	4, // 5: DeployData.input_sections:type_name -> Section
-	6, // 6: DeployData.links:type_name -> DeploymentLink
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+var file_bpconsume_jumpstartsolutions_protos_solution_proto_depIdxs = []int32{
+	3,  // 0: Solution.git_source:type_name -> GitSource
+	4,  // 1: Solution.deployment_estimate:type_name -> DeploymentEstimate
+	9,  // 2: Solution.cloud_product_identifiers:type_name -> CloudProductIdentifier
+	11, // 3: Solution.deploy_data:type_name -> DeployData
+	6,  // 4: Section.properties:type_name -> Property
+	0,  // 5: Property.type:type_name -> Property.Type
+	10, // 6: CloudProductIdentifier.console_product_identifier:type_name -> ConsoleProductIdentifier
+	5,  // 7: DeployData.input_sections:type_name -> Section
+	7,  // 8: DeployData.links:type_name -> DeploymentLink
+	8,  // 9: DeployData.org_policy_checks:type_name -> OrgPolicyCheck
+	1,  // 10: DeployData.location_configs:type_name -> DeployData.DeployLocationConfig
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
-func init() { file_solution_proto_init() }
-func file_solution_proto_init() {
-	if File_solution_proto != nil {
+func init() { file_bpconsume_jumpstartsolutions_protos_solution_proto_init() }
+func file_bpconsume_jumpstartsolutions_protos_solution_proto_init() {
+	if File_bpconsume_jumpstartsolutions_protos_solution_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_solution_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Solution); i {
 			case 0:
 				return &v.state
@@ -778,7 +1165,7 @@ func file_solution_proto_init() {
 				return nil
 			}
 		}
-		file_solution_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GitSource); i {
 			case 0:
 				return &v.state
@@ -790,7 +1177,7 @@ func file_solution_proto_init() {
 				return nil
 			}
 		}
-		file_solution_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeploymentEstimate); i {
 			case 0:
 				return &v.state
@@ -802,7 +1189,7 @@ func file_solution_proto_init() {
 				return nil
 			}
 		}
-		file_solution_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Section); i {
 			case 0:
 				return &v.state
@@ -814,7 +1201,7 @@ func file_solution_proto_init() {
 				return nil
 			}
 		}
-		file_solution_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Property); i {
 			case 0:
 				return &v.state
@@ -826,7 +1213,7 @@ func file_solution_proto_init() {
 				return nil
 			}
 		}
-		file_solution_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeploymentLink); i {
 			case 0:
 				return &v.state
@@ -838,7 +1225,43 @@ func file_solution_proto_init() {
 				return nil
 			}
 		}
-		file_solution_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OrgPolicyCheck); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CloudProductIdentifier); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ConsoleProductIdentifier); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*DeployData); i {
 			case 0:
 				return &v.state
@@ -855,19 +1278,19 @@ func file_solution_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_solution_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   7,
+			RawDescriptor: file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDesc,
+			NumEnums:      2,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_solution_proto_goTypes,
-		DependencyIndexes: file_solution_proto_depIdxs,
-		EnumInfos:         file_solution_proto_enumTypes,
-		MessageInfos:      file_solution_proto_msgTypes,
+		GoTypes:           file_bpconsume_jumpstartsolutions_protos_solution_proto_goTypes,
+		DependencyIndexes: file_bpconsume_jumpstartsolutions_protos_solution_proto_depIdxs,
+		EnumInfos:         file_bpconsume_jumpstartsolutions_protos_solution_proto_enumTypes,
+		MessageInfos:      file_bpconsume_jumpstartsolutions_protos_solution_proto_msgTypes,
 	}.Build()
-	File_solution_proto = out.File
-	file_solution_proto_rawDesc = nil
-	file_solution_proto_goTypes = nil
-	file_solution_proto_depIdxs = nil
+	File_bpconsume_jumpstartsolutions_protos_solution_proto = out.File
+	file_bpconsume_jumpstartsolutions_protos_solution_proto_rawDesc = nil
+	file_bpconsume_jumpstartsolutions_protos_solution_proto_goTypes = nil
+	file_bpconsume_jumpstartsolutions_protos_solution_proto_depIdxs = nil
 }
